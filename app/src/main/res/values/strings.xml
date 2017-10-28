@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Elevate</string>
+    <string name="title_activity_add">Add Item</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
 </resources>
