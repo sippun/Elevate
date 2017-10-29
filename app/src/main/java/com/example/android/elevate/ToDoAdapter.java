@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     private List<ToDoItem> items;
+    private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -52,7 +55,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         ToDoItem item = items.get(position);
 
         TextView textView = holder.nameTextView;
-        textView.setText(item.getName());
+        textView.setText(item.getName() + "  "+
+                sdf.format(item.getStartTime().getTime()) + "  "+
+                sdf.format(item.getEndTime().getTime()));
     }
 
     // Return the size of your dataset (invoked by the layout manager)

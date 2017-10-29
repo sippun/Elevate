@@ -1,5 +1,6 @@
 package com.example.android.elevate;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,7 +31,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -100,5 +103,22 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        //Collect results from AddTask. Extract task info into time and date variables and
+        //create a new task with them.
+        //then notify adapter to update list
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                String title = data.getStringExtra("title");
+                Calendar time1 = (Calendar) data.getExtras().get("time1");
+                Calendar time2 = (Calendar) data.getExtras().get("time2");
+                ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                f.insertItem(title, time1, time2);
+            }
+        }
     }
 }
