@@ -1,6 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.elevate.AddActivity">
 
-</LinearLayout>
+    <EditText
+        android:id="@+id/text_TaskTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text_StartDate"
+        android:layout_alignEnd="@+id/button_CreateTask"
+        android:layout_marginBottom="81dp"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
+        android:hint="Task Title"
+        android:inputType="text"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="64dp"
+        tools:layout_editor_absoluteY="137dp" />
+
+    <Button
+        android:id="@+id/button_CreateTask"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="63dp"
+        android:layout_marginEnd="47dp"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:elevation="0dp"
+        android:text="Create Task"
+        tools:layout_editor_absoluteX="239dp"
+        tools:layout_editor_absoluteY="490dp" />
+
+    <TextView
+        android:id="@+id/text_StartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/button_CreateTask"
+        android:layout_alignTop="@+id/text_StartTime"
+        android:background="@android:color/holo_blue_bright"
+        android:backgroundTint="@android:color/holo_blue_bright"
+        android:padding="10sp"
+        android:text="Date"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="298dp"
+        tools:layout_editor_absoluteY="353dp" />
+
+    <TextView
+        android:id="@+id/text_EndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/text_StartDate"
+        android:layout_alignTop="@+id/text_EndTime"
+        android:background="@android:color/holo_green_light"
+        android:padding="10sp"
+        android:text="Date"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="298dp"
+        tools:layout_editor_absoluteY="254dp" />
+
+    <TextView
+        android:id="@+id/text_StartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text_EndTime"
+        android:layout_alignStart="@+id/text_EndTime"
+        android:layout_marginBottom="58dp"
+        android:padding="10sp"
+        android:text="Start Time"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="64dp"
+        tools:layout_editor_absoluteY="254dp" />
+
+    <TextView
+        android:id="@+id/text_EndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_CreateTask"
+        android:layout_marginBottom="66dp"
+        android:layout_marginEnd="54dp"
+        android:layout_toStartOf="@+id/text_EndDate"
+        android:padding="10sp"
+        android:text="End Time"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="64dp"
+        tools:layout_editor_absoluteY="353dp" />
+
+</RelativeLayout>

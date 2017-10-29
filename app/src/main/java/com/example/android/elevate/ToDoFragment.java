@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class ToDoFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<ToDoItem> myDataset;
+    private ArrayList<ToDoItem> myDataset;
 
     @Nullable
     @Override
@@ -31,13 +32,19 @@ public class ToDoFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         myDataset = new ArrayList<ToDoItem>();
-        myDataset.add(new ToDoItem("Eat"));
-        myDataset.add(new ToDoItem("Sleep"));
-        myDataset.add(new ToDoItem("Code"));
-        myDataset.add(new ToDoItem("Repeat"));
+        Calendar cal = Calendar.getInstance();
+        myDataset.add(new ToDoItem("Eat", cal, cal));
+        myDataset.add(new ToDoItem("Sleep", cal ,cal));
+        myDataset.add(new ToDoItem("Code", cal, cal));
+        myDataset.add(new ToDoItem("Repeat", cal, cal));
 
         mAdapter = new ToDoAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
+    }
+
+    public void insertItem(String name, Calendar startTime, Calendar endTime){
+        myDataset.add(new ToDoItem(name, startTime, endTime));
+        mAdapter.notifyItemInserted(myDataset.size() - 1);
     }
 }
