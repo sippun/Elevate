@@ -158,14 +158,12 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(taskTitle.getText() != null) {
-                    //Intent intent = new Intent(AddActivity.this, MainActivity.class);
-                    //intent.putExtra("title", taskTitle.getText().toString());
-                    //intent.putExtra("time1", time1);
-                    //intent.putExtra("time2", time2);
-                    //setResult(Activity.RESULT_OK, intent);
-                    //finish();
-                    ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.);
-                    f.insertItem(taskTitle.getText().toString(), time1, time2);
+                    Intent intent = new Intent(AddActivity.this, MainActivity.class);
+                    intent.putExtra("title", taskTitle.getText().toString());
+                    intent.putExtra("time1", time1);
+                    intent.putExtra("time2", time2);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
                 }
                 else{
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);

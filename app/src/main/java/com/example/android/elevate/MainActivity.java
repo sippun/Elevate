@@ -116,9 +116,8 @@ public class MainActivity extends AppCompatActivity
                 String title = data.getStringExtra("title");
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
-
-
-                //adapter.notifyItemInserted(tasks.size() - 1);
+                ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                f.insertItem(title, time1, time2);
             }
         }
     }

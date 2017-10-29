@@ -21,7 +21,7 @@ public class ToDoFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<ToDoItem> myDataset;
+    public ArrayList<ToDoItem> myDataset;
 
     @Nullable
     @Override
