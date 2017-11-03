@@ -15,10 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    //Hashmap stores <DAY, TODOITEM> pairs
+    public static HashMap<String,ArrayList<ToDoItem>> myDataMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,5 +132,10 @@ public class MainActivity extends AppCompatActivity
                 toast.show();
             }
         }
+    }
+
+    public void jumpToDayView(int day, int month, int year){
+        getSupportFragmentManager().beginTransaction().
+                replace(R.id.fragment_container, new ToDoFragment(day, month, year)).commit();
     }
 }

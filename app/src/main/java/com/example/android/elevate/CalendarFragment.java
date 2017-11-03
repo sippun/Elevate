@@ -1,5 +1,6 @@
 package com.example.android.elevate;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,13 +26,9 @@ public class CalendarFragment extends Fragment{
         cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                month++;
-                Intent intent = new Intent(Calendar.this, TasksActivity.class);
-                intent.putExtra("day", dayOfMonth);
-                intent.putExtra("month", month);
-                intent.putExtra("year", year);
-                startActivity(intent);
-            }
+                getFragmentManager().beginTransaction().
+                        replace(R.id.fragment_container, new ToDoFragment(dayOfMonth, month, year)).commit();
+                }
         });
         return v;
     }
