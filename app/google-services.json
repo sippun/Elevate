@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "659216528637",
+    "firebase_url": "https://elevate-80c46.firebaseio.com",
+    "project_id": "elevate-80c46",
+    "storage_bucket": "elevate-80c46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659216528637:android:f1e153fc639f4dc0",
+        "android_client_info": {
+          "package_name": "com.example.android.elevate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659216528637-lq97ad5fhv4k9cpnlq7ghof2ssh004oo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.elevate",
+            "certificate_hash": "d33ea949f3c3e9d5130e6441fc4c677bdbd2551f"
+          }
+        },
+        {
+          "client_id": "659216528637-d9oqeoi8cdmlqar722rj6g9m7d4jq44o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCycYNGWoF2jN2zLFmTf4z57SEfkkKvEa0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659216528637-d9oqeoi8cdmlqar722rj6g9m7d4jq44o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
