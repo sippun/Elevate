@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -13,9 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.Calendar;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -157,6 +160,9 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                mDatabase.child("garbage can").child("message").setValue("Hello, World!");
+
                 if(taskTitle.getText() != null) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
                     intent.putExtra("title", taskTitle.getText().toString());
