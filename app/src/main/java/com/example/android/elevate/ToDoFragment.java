@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Created by Joel on 10/20/2017.
@@ -20,7 +21,7 @@ public class ToDoFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    public ArrayList<ToDoItem> myDataset;
+    public HashMap<ArrayList<Integer>,ArrayList<ToDoItem>> myDataMap;
 
     @Nullable
     @Override
@@ -30,12 +31,19 @@ public class ToDoFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        myDataset = new ArrayList<ToDoItem>();
         Calendar cal = Calendar.getInstance();
+        ArrayList<ToDoItem> myDataset = new ArrayList<>();
         myDataset.add(new ToDoItem("Eat", cal, cal));
         myDataset.add(new ToDoItem("Sleep", cal ,cal));
         myDataset.add(new ToDoItem("Code", cal, cal));
         myDataset.add(new ToDoItem("Repeat", cal, cal));
+
+        ArrayList<Integer> day_month_year = new ArrayList<Integer>();
+        day_month_year.add(cal.get(Calendar.DAY_OF_MONTH));
+        day_month_year.add(cal.get(Calendar.MONTH));
+        day_month_year.add(cal.YEAR);
+
+        myDataMap.put({cal.DAY_OF_YEAR, cal.YEAR}, )
 
         mAdapter = new ToDoAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -89,7 +90,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_calendar) {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new CalendarFragment()).commit();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_home) {
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.fragment_container, new ToDoFragment()).commit();
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -119,6 +122,9 @@ public class MainActivity extends AppCompatActivity
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 f.insertItem(title, time1, time2);
+                String msg = title + " has been created successfully";
+                Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT);
+                toast.show();
             }
         }
     }

@@ -17,7 +17,7 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        //calendar = v.findViewById(R.id.calendarView);
+        calendar = v.findViewById(R.id.calendarView);
 
         //calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
         //    @Override
