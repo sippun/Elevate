@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Joel on 10/20/2017.
@@ -21,7 +22,9 @@ public class ToDoFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    public HashMap<ArrayList<Integer>,ArrayList<ToDoItem>> myDataMap;
+
+    //Hashmap stores <DAY, TODOITEM> pairs
+    public HashMap<String,ArrayList<ToDoItem>> myDataMap;
 
     @Nullable
     @Override
@@ -38,12 +41,9 @@ public class ToDoFragment extends Fragment {
         myDataset.add(new ToDoItem("Code", cal, cal));
         myDataset.add(new ToDoItem("Repeat", cal, cal));
 
-        ArrayList<Integer> day_month_year = new ArrayList<Integer>();
-        day_month_year.add(cal.get(Calendar.DAY_OF_MONTH));
-        day_month_year.add(cal.get(Calendar.MONTH));
-        day_month_year.add(cal.YEAR);
+        String day_year = cal.DAY_OF_YEAR+":"+cal.YEAR;
 
-        myDataMap.put({cal.DAY_OF_YEAR, cal.YEAR}, )
+        myDataMap.put(day_year, myDataset);
 
         mAdapter = new ToDoAdapter(myDataset);
         mRecyclerView.setAdapter(mAdapter);
@@ -51,7 +51,20 @@ public class ToDoFragment extends Fragment {
     }
 
     public void insertItem(String name, Calendar startTime, Calendar endTime){
-        myDataset.add(new ToDoItem(name, startTime, endTime));
-        mAdapter.notifyItemInserted(myDataset.size() - 1);
+
+        for(int i = startTime.YEAR; i <= endTime.YEAR; i++){
+            for(int j=startTime.DAY_OF_YEAR; i<=endTime.DAY_OF_YEAR;i++){
+                String key = i+":"+j;
+                if(myDataMap.get(key)!=null){
+                    myDataMap.get(key).add(new ToDoItem(name, startTime, endTime));
+                }
+                else{
+                    ArrayList<ToDoItem> myDataset = new ArrayList<>();
+                    myDataset.add(new ToDoItem(name, startTime, endTime));
+                    myDataMap.put(key, myDataset);
+                }
+            }
+        }
+        //mAdapter.notifyItemInserted(myDataset.size() - 1);
     }
 }
