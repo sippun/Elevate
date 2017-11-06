@@ -8,7 +8,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
@@ -17,10 +16,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
         <activity
             android:name=".AddActivity"
             android:label="@string/title_activity_add"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity
+            android:name=".ColorTesting"
+            android:label="Color Test"
             android:parentActivityName=".MainActivity">
         </activity>
     </application>
