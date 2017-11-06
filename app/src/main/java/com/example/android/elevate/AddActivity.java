@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.text.DateFormat;
@@ -21,9 +22,9 @@ public class AddActivity extends AppCompatActivity {
 
     DatePickerDialog.OnDateSetListener dListener1, dListener2;
     TimePickerDialog.OnTimeSetListener tListener1, tListener2;
-    int currentDay, currentMonth, currentYear;
+    int currentDay, currentMonth, currentYear; //temp values to hold input
     String date1, date2;
-    Calendar time1, time2;
+    private Calendar time1, time2;   //actual start and end times to be passed back to main activity
     private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     @Override
@@ -44,7 +45,8 @@ public class AddActivity extends AppCompatActivity {
         Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
 
         //retrieve date info from intent by TasksActivity. default set to 1/1/2017
-        time1 = time2 = cal;
+        time1 = Calendar.getInstance();
+        time2 = Calendar.getInstance();
         currentDay = getIntent().getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH));
         currentMonth = getIntent().getIntExtra("month", cal.get(Calendar.MONTH)+1);
         currentYear = getIntent().getIntExtra("year",cal.get(Calendar.YEAR));
@@ -152,12 +154,12 @@ public class AddActivity extends AppCompatActivity {
         };
 
         //Click on create task button to bundle up task info
-        //and send it back to TasksActivity thru intent with RESULT_OK
-        //format: Task Title, Start Time, Start Date, End Time, End Date
+        //and send it back to MainActivity thru intent with RESULT_OK
+        //format: Task Title, Start Time, End Time
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(taskTitle.getText() != null) {
+                if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
                     intent.putExtra("title", taskTitle.getText().toString());
                     intent.putExtra("time1", time1);
@@ -178,7 +180,7 @@ public class AddActivity extends AppCompatActivity {
     };
 
     public void setDate(Calendar time, int year, int month, int day){
-        time.set(Calendar.YEAR, year);
+        time.set(Calendar.DAY_OF_MONTH, day);
         time.set(Calendar.MONTH, month);
         time.set(Calendar.YEAR, year);
     };
