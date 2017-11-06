@@ -9,11 +9,13 @@ import java.util.Calendar;
 public class ToDoItem {
     String name;
     Calendar startTime, endTime;
+    boolean done;
 
     public ToDoItem(String name, Calendar startTime, Calendar endTime){
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
+        done = false;
     }
 
     public String getName(){
@@ -21,4 +23,5 @@ public class ToDoItem {
     }
     public Calendar getStartTime(){ return startTime;}
     public Calendar getEndTime(){ return endTime;}
+    public void finish(){done = true;}
 }
