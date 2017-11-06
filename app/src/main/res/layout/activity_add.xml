@@ -95,9 +95,9 @@
     <CheckedTextView
         android:id="@+id/checkedMon"
         style="@style/checktextview"
-        android:layout_alignStart="@+id/text_EndTime"
-        android:layout_below="@+id/text_EndDate"
-        android:layout_marginTop="49dp"
+        android:layout_alignBottom="@+id/checkedFri"
+        android:layout_marginBottom="26dp"
+        android:layout_alignStart="@+id/text_StartTime"
         android:text="Mon" />
 
     <CheckedTextView
@@ -105,10 +105,8 @@
         style="@style/checktextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkedMon"
         android:layout_alignBottom="@+id/checkedMon"
-        android:layout_marginEnd="16dp"
-        android:layout_toStartOf="@+id/text_EndDate"
+        android:layout_toEndOf="@+id/checkedMon"
         android:text="Tue" />
 
     <CheckedTextView
@@ -118,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/checkedTue"
         android:layout_alignBottom="@+id/checkedTue"
-        android:layout_alignEnd="@+id/text_EndDate"
+        android:layout_toEndOf="@+id/checkedTue"
         android:text="Wed" />
 
     <CheckedTextView
@@ -128,7 +126,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/checkedWed"
         android:layout_alignBottom="@+id/checkedWed"
-        android:layout_alignEnd="@+id/text_TaskTitle"
+        android:layout_toEndOf="@+id/checkedWed"
         android:text="Thur" />
 
     <CheckedTextView
@@ -136,8 +134,8 @@
         style="@style/checktextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/button_CreateTask"
         android:layout_alignStart="@+id/checkedMon"
-        android:layout_below="@+id/checkedMon"
         android:text="Fri" />
 
     <CheckedTextView
@@ -145,8 +143,9 @@
         style="@style/checktextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/checkedTue"
-        android:layout_below="@+id/checkedTue"
+        android:layout_alignBaseline="@+id/checkedFri"
+        android:layout_alignBottom="@+id/checkedFri"
+        android:layout_toEndOf="@+id/checkedFri"
         android:text="Sat" />
 
     <CheckedTextView
@@ -156,7 +155,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/checkedSat"
         android:layout_alignBottom="@+id/checkedSat"
-        android:layout_alignEnd="@+id/checkedWed"
+        android:layout_toEndOf="@+id/checkedSat"
         android:text="Sun" />
 
 </RelativeLayout>

@@ -47,10 +47,6 @@ public class ToDoFragment extends Fragment {
 
         //initiate dummy list with current time as start/end time
         ArrayList<ToDoItem> myDataset = new ArrayList<>();
-        myDataset.add(new ToDoItem("Eat", cal, cal));
-        myDataset.add(new ToDoItem("Sleep", cal ,cal));
-        myDataset.add(new ToDoItem("Code", cal, cal));
-        myDataset.add(new ToDoItem("Repeat", cal, cal));
 
         main = (MainActivity)getActivity();
 
@@ -71,6 +67,8 @@ public class ToDoFragment extends Fragment {
         while(pointer.before(endTime)){
 
             //hashmap key = "day:year"
+            //if hashmap doesn't contain key, insert item into a new list
+            //otherwise insert item into existing list, then increment pointer by 1 day
             String key = pointer.get(Calendar.DAY_OF_YEAR)+":"+pointer.get(Calendar.YEAR);
             if(main.myDataMap.get(key)!=null){
                 main.myDataMap.get(key).add(new ToDoItem(name, startTime, endTime));
