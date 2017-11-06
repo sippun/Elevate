@@ -36,7 +36,6 @@ public class ToDoFragment extends Fragment {
                 cal.get(Calendar.YEAR);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,26 +59,43 @@ public class ToDoFragment extends Fragment {
     }
 
     //insert to-do item into lists from startTime to endTime
-    public void insertItem(String name, Calendar startTime, Calendar endTime){
+    public void insertItem(String name, Calendar startTime, Calendar endTime, ArrayList<Integer> recurringDays){
 
         //pointer starts at startTime and increments towards endTime
         Calendar pointer = (Calendar)startTime.clone();
-        while(pointer.before(endTime)){
+        while(pointer.before(endTime)) {
 
-            //hashmap key = "day:year"
-            //if hashmap doesn't contain key, insert item into a new list
-            //otherwise insert item into existing list, then increment pointer by 1 day
-            String key = pointer.get(Calendar.DAY_OF_YEAR)+":"+pointer.get(Calendar.YEAR);
-            if(main.myDataMap.get(key)!=null){
-                main.myDataMap.get(key).add(new ToDoItem(name, startTime, endTime));
-                mAdapter.notifyDataSetChanged();
-            }else{
-                ArrayList<ToDoItem> myDataset = new ArrayList<>();
-                myDataset.add(new ToDoItem(name, startTime, endTime));
-                main.myDataMap.put(key, myDataset);
-                mAdapter.notifyDataSetChanged();
+            //check if pointer's weekday is set to recur
+            if (checkWeekDayRecur(pointer, recurringDays)) {
+                //hashmap key = "day:year"
+                //if hashmap doesn't contain key, insert item into a new list
+                //otherwise insert item into existing list, then increment pointer by 1 day
+                String key = pointer.get(Calendar.DAY_OF_YEAR) + ":" + pointer.get(Calendar.YEAR);
+                if (main.myDataMap.get(key) != null) {
+                    main.myDataMap.get(key).add(new ToDoItem(name, startTime, endTime, recurringDays));
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    ArrayList<ToDoItem> myDataset = new ArrayList<>();
+                    myDataset.add(new ToDoItem(name, startTime, endTime, recurringDays));
+                    main.myDataMap.put(key, myDataset);
+                    mAdapter.notifyDataSetChanged();
+                }
+                pointer.add(Calendar.DATE, 1);
             }
-            pointer.add(Calendar.DATE, 1);
+        }
+    }
+
+    //return true if recurList has pointer's weekday flagged as 1
+    public boolean checkWeekDayRecur(Calendar pointer, ArrayList<Integer> recurringDays){
+        switch(pointer.get(Calendar.DAY_OF_WEEK)){
+            case Calendar.MONDAY: return recurringDays.get(0)==1;
+            case Calendar.TUESDAY: return recurringDays.get(1)==1;
+            case Calendar.WEDNESDAY: return recurringDays.get(2)==1;
+            case Calendar.THURSDAY: return recurringDays.get(3)==1;
+            case Calendar.FRIDAY: return recurringDays.get(4)==1;
+            case Calendar.SATURDAY: return recurringDays.get(5)==1;
+            case Calendar.SUNDAY: return recurringDays.get(6)==1;
+            default: return false;
         }
     }
 }

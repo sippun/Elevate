@@ -12,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.text.DateFormat;
@@ -55,8 +54,6 @@ public class AddActivity extends AppCompatActivity {
         date1 = date2 = currentMonth+"/"+currentDay+"/"+currentYear;
         startDate.setText(date1);
         endDate.setText(date2);
-
-
 
         //click on startTime/endTime boxes to open up time pickers. Assign correct listeners.
         startTime.setOnClickListener(new View.OnClickListener() {
