@@ -7,14 +7,15 @@ package com.example.android.elevate;
 import java.util.Calendar;
 
 public class ToDoItem {
-    String name;
+    String name, id;
     Calendar startTime, endTime;
     boolean done;
 
-    //boolean mon, tue, wed, thur, fri, sat, sun;
+    public ToDoItem(){}
 
     public ToDoItem(String name, Calendar startTime, Calendar endTime){
         this.name = name;
+        this.id = name.toLowerCase()+"ID"; //eventually should use actual push function to create unique ids
         this.startTime = startTime;
         this.endTime = endTime;
         done = false;
@@ -23,7 +24,10 @@ public class ToDoItem {
     public String getName(){
         return name;
     }
+    public String getId(){return id;}
     public Calendar getStartTime(){ return startTime;}
     public Calendar getEndTime(){ return endTime;}
+
     public void finish(){done = true;}
 }
+
