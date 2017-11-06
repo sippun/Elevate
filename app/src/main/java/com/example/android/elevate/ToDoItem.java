@@ -11,6 +11,8 @@ public class ToDoItem {
     Calendar startTime, endTime;
     boolean done;
 
+    //boolean mon, tue, wed, thur, fri, sat, sun;
+
     public ToDoItem(String name, Calendar startTime, Calendar endTime){
         this.name = name;
         this.startTime = startTime;
