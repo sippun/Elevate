@@ -28,10 +28,12 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
         <RadioButton
+            android:id="@+id/radio_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Task"/>
         <RadioButton
+            android:id="@+id/radio_habit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Habit"/>

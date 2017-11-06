@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -46,6 +47,8 @@ public class AddActivity extends AppCompatActivity {
         final TextView startTime = (TextView) findViewById(R.id.text_StartTime);
         final TextView endTime = (TextView) findViewById(R.id.text_EndTime);
         Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
+        RadioGroup taskTypeGroup = (RadioGroup) findViewById(R.id.radio_TaskType);
+        taskTypeGroup.check(R.id.radio_task);
 
         //retrieve date info from intent by TasksActivity. default set to 1/1/2017
         time1 = time2 = cal;
@@ -161,15 +164,20 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+
+                DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
+                        time1.getTimeInMillis(),
+                        time2.getTimeInMillis());
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if(user != null){
+                if(user != null) {
                     FirebaseDatabase.getInstance().getReference()
                             .child("users")
                             .child(user.getUid())
                             .child("tasks")
-                            .child(taskTitle.getText().toString())
-                            .setValue(date1);
+                            .push()
+                            .setValue(newTask);
                 }
+
 
 
                 if(taskTitle.getText() != null) {
