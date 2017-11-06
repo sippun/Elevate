@@ -77,6 +77,8 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference doneness = database.getReference(userDataPath+"/tasks/"+itemID+"/done");
+
+
         //Pull initial state from the database:
         doneness.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

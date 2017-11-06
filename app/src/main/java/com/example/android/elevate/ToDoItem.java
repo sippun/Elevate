@@ -11,6 +11,9 @@ public class ToDoItem {
     Calendar startTime, endTime;
     boolean done;
 
+
+    public ToDoItem(){}
+
     public ToDoItem(String name, Calendar startTime, Calendar endTime){
         this.name = name;
         this.id = name.toLowerCase()+"ID"; //eventually should use actual push function to create unique ids
