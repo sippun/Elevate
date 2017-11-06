@@ -15,12 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,6 +33,9 @@ public class MainActivity extends AppCompatActivity
 
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
+
+    //Hashmap stores <DAY, TODOITEM> pairs
+    public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +141,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_calendar) {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new CalendarFragment()).commit();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_home) {
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.fragment_container, new ToDoFragment()).commit();
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -156,8 +163,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //Collect results from AddTask. Extract task info into time and date variables and
-        //create a new task with them.
+        //Collect results from AddActivity. Extract item info into time and date variables and
+        //create a new todoitem with them.
         //then notify adapter to update list
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
@@ -166,7 +173,11 @@ public class MainActivity extends AppCompatActivity
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 f.insertItem(title, time1, time2);
+                String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
+                Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
+                toast.show();
             }
         }
     }
+
 }
