@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     //Hashmap stores <DAY, TODOITEM> pairs
-    public static HashMap<String,ArrayList<ToDoItem>> myDataMap;
+    public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //Collect results from AddTask. Extract task info into time and date variables and
-        //create a new task with them.
+        //Collect results from AddActivity. Extract item info into time and date variables and
+        //create a new todoitem with them.
         //then notify adapter to update list
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
@@ -127,15 +127,11 @@ public class MainActivity extends AppCompatActivity
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 f.insertItem(title, time1, time2);
-                String msg = title + " has been created successfully";
-                Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT);
+                String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
+                Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
             }
         }
     }
 
-    public void jumpToDayView(int day, int month, int year){
-        getSupportFragmentManager().beginTransaction().
-                replace(R.id.fragment_container, new ToDoFragment(day, month, year)).commit();
-    }
 }
