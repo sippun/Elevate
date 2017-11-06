@@ -22,9 +22,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-
 
 public class ToDoFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -106,23 +103,25 @@ public class ToDoFragment extends Fragment {
         return rootView;
     }
 
+    //insert to-do item into lists from startTime to endTime
     public void insertItem(String name, Calendar startTime, Calendar endTime){
 
-        for(int i = startTime.get(Calendar.YEAR); i <= endTime.get(Calendar.YEAR); i++){
-            for(int j=startTime.get(Calendar.DAY_OF_YEAR); j<=endTime.get(Calendar.DAY_OF_YEAR);j++){
+        //pointer starts at startTime and increments towards endTime
+        Calendar pointer = (Calendar)startTime.clone();
+        while(pointer.before(endTime)){
 
-                String key = j+":"+i;
-
-                if(main.myDataMap.get(key)!=null){
-                    main.myDataMap.get(key).add(new ToDoItem(name, startTime, endTime));
-                    mAdapter.notifyDataSetChanged();
-                }else{
-                    ArrayList<ToDoItem> myDataset = new ArrayList<>();
-                    myDataset.add(new ToDoItem(name, startTime, endTime));
-                    main.myDataMap.put(key, myDataset);
-                    mAdapter.notifyDataSetChanged();
-                }
+            //hashmap key = "day:year"
+            String key = pointer.get(Calendar.DAY_OF_YEAR)+":"+pointer.get(Calendar.YEAR);
+            if(main.myDataMap.get(key)!=null){
+                main.myDataMap.get(key).add(new ToDoItem(name, startTime, endTime));
+                mAdapter.notifyDataSetChanged();
+            }else{
+                ArrayList<ToDoItem> myDataset = new ArrayList<>();
+                myDataset.add(new ToDoItem(name, startTime, endTime));
+                main.myDataMap.put(key, myDataset);
+                mAdapter.notifyDataSetChanged();
             }
+            pointer.add(Calendar.DATE, 1);
         }
     }
 }
