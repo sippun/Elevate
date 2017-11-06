@@ -6,9 +6,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import android.widget.Toast;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,6 +27,10 @@ public class ToDoFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    public ArrayList<ToDoItem> myDataset;
+    private static final String userDataPath = "bethsTestTree";
+
     String day_year;
     Calendar cal;
     public MainActivity main;
@@ -43,6 +57,31 @@ public class ToDoFragment extends Fragment {
         mRecyclerView = rootView.findViewById(R.id.recycler_view_todo);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+  
+        myDataset = new ArrayList<ToDoItem>();
+        final Calendar cal = Calendar.getInstance();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference tasks = database.getReference(userDataPath+"/tasks");
+
+        tasks.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot task : dataSnapshot.getChildren()) {
+                    ToDoItem item = task.getValue(ToDoItem.class);
+                    myDataset.add(new ToDoItem(item.name, cal, cal));
+                    Log.d("TaskList", item.name);
+                }
+
+                mAdapter = new ToDoAdapter(myDataset);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("TaskList", "Something went wrong with getting the existing tasks");
+            }
+        });
 
         //initiate dummy list with current time as start/end time
         ArrayList<ToDoItem> myDataset = new ArrayList<>();
@@ -55,6 +94,7 @@ public class ToDoFragment extends Fragment {
 
         mAdapter = new ToDoAdapter(main.myDataMap.get(day_year));
         mRecyclerView.setAdapter(mAdapter);
+
         return rootView;
     }
 
