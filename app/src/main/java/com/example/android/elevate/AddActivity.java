@@ -4,18 +4,23 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.Calendar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -42,6 +47,8 @@ public class AddActivity extends AppCompatActivity {
         final TextView startTime = (TextView) findViewById(R.id.text_StartTime);
         final TextView endTime = (TextView) findViewById(R.id.text_EndTime);
         Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
+        RadioGroup taskTypeGroup = (RadioGroup) findViewById(R.id.radio_TaskType);
+        taskTypeGroup.check(R.id.radio_task);
 
         //retrieve date info from intent by TasksActivity. default set to 1/1/2017
         time1 = Calendar.getInstance();
@@ -156,6 +163,20 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
+                        time1.getTimeInMillis(),
+                        time2.getTimeInMillis());
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user != null) {
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("tasks")
+                            .push()
+                            .setValue(newTask);
+                }
+
+
                 if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
                     intent.putExtra("title", taskTitle.getText().toString());

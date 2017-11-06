@@ -10,16 +10,80 @@
         android:id="@+id/text_TaskTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/text_StartDate"
+        android:layout_alignParentTop="true"
         android:layout_alignEnd="@+id/button_CreateTask"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="Task Title"
         android:inputType="text"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="64dp"
-        tools:layout_editor_absoluteY="137dp" />
+        android:textSize="24sp"/>
+
+    <RadioGroup
+        android:id="@+id/radio_TaskType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_TaskTitle"
+        android:layout_alignLeft="@id/text_TaskTitle"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radio_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task"/>
+        <RadioButton
+            android:id="@+id/radio_habit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Habit"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/text_StartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radio_TaskType"
+        android:layout_alignLeft="@id/radio_TaskType"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="45dp"
+        android:padding="5sp"
+        android:text="Start Time"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/text_EndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_StartTime"
+        android:layout_alignLeft="@id/text_StartTime"
+        android:layout_marginBottom="70dp"
+        android:padding="5sp"
+        android:text="End Time"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/text_StartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/text_TaskTitle"
+        android:layout_alignTop="@id/text_StartTime"
+        android:background="@android:color/holo_blue_bright"
+        android:backgroundTint="@android:color/holo_blue_bright"
+        android:padding="5sp"
+        android:text="Date"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/text_EndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/text_TaskTitle"
+        android:layout_alignTop="@id/text_EndTime"
+        android:background="@android:color/holo_green_light"
+        android:padding="5sp"
+        android:text="Date"
+        android:textSize="24sp"/>
 
     <Button
         android:id="@+id/button_CreateTask"
@@ -32,65 +96,7 @@
         android:layout_marginEnd="47dp"
         android:backgroundTint="@android:color/holo_blue_light"
         android:elevation="0dp"
-        android:text="Create Task"
-        tools:layout_editor_absoluteX="239dp"
-        tools:layout_editor_absoluteY="490dp" />
-
-    <TextView
-        android:id="@+id/text_StartDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/text_StartTime"
-        android:layout_alignBottom="@+id/text_StartTime"
-        android:layout_marginStart="29dp"
-        android:layout_toEndOf="@+id/text_StartTime"
-        android:background="@android:color/holo_blue_bright"
-        android:backgroundTint="@android:color/holo_blue_bright"
-        android:padding="5sp"
-        android:text="Date"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="298dp"
-        tools:layout_editor_absoluteY="353dp" />
-
-    <TextView
-        android:id="@+id/text_EndDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/text_EndTime"
-        android:layout_alignBottom="@+id/text_EndTime"
-        android:layout_alignStart="@+id/text_StartDate"
-        android:background="@android:color/holo_green_light"
-        android:padding="5sp"
-        android:text="Date"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="298dp"
-        tools:layout_editor_absoluteY="254dp" />
-
-    <TextView
-        android:id="@+id/text_StartTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/text_EndTime"
-        android:layout_alignStart="@+id/text_TaskTitle"
-        android:layout_marginBottom="30dp"
-        android:padding="5sp"
-        android:text="Start Time"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="64dp"
-        tools:layout_editor_absoluteY="254dp" />
-
-    <TextView
-        android:id="@+id/text_EndTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_CreateTask"
-        android:layout_alignStart="@+id/text_StartTime"
-        android:layout_marginBottom="140dp"
-        android:padding="5sp"
-        android:text="End Time"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="64dp"
-        tools:layout_editor_absoluteY="353dp" />
+        android:text="Create Task" />
 
     <CheckedTextView
         android:id="@+id/checkedMon"
