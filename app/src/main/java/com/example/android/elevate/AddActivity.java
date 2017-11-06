@@ -13,6 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -157,6 +161,17 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user != null){
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("tasks")
+                            .child(taskTitle.getText().toString())
+                            .setValue(date1);
+                }
+
+
                 if(taskTitle.getText() != null) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
                     intent.putExtra("title", taskTitle.getText().toString());
