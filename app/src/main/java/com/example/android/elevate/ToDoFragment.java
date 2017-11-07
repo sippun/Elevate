@@ -61,31 +61,6 @@ public class ToDoFragment extends Fragment {
         myDataset = new ArrayList<ToDoItem>();
         final Calendar cal = Calendar.getInstance();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference tasks = database.getReference(userDataPath+"/tasks");
-
-        tasks.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot task : dataSnapshot.getChildren()) {
-                    ToDoItem item = task.getValue(ToDoItem.class);
-                    myDataset.add(new ToDoItem(item.name, cal, cal));
-                    Log.d("TaskList", item.name);
-                }
-
-                mAdapter = new ToDoAdapter(myDataset);
-                mRecyclerView.setAdapter(mAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("TaskList", "Something went wrong with getting the existing tasks");
-            }
-        });
-
-        //initiate dummy list with current time as start/end time
-        ArrayList<ToDoItem> myDataset = new ArrayList<>();
-
         main = (MainActivity)getActivity();
 
         if(main.myDataMap.get(day_year) == null) {
@@ -99,12 +74,11 @@ public class ToDoFragment extends Fragment {
     }
 
     //insert to-do item into lists from startTime to endTime
-    public void insertItem(String name, Calendar startTime, Calendar endTime, ArrayList<Integer> recurringDays){
+    public void insertItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays){
 
         //pointer starts at startTime and increments towards endTime
         Calendar pointer = (Calendar)startTime.clone();
         while(pointer.before(endTime)) {
-
             //check if pointer's weekday is set to recur
             if (checkWeekDayRecur(pointer, recurringDays)) {
                 //hashmap key = "day:year"
@@ -126,15 +100,15 @@ public class ToDoFragment extends Fragment {
     }
 
     //return true if recurList has pointer's weekday flagged as 1
-    public boolean checkWeekDayRecur(Calendar pointer, ArrayList<Integer> recurringDays){
+    public boolean checkWeekDayRecur(Calendar pointer, boolean[] recurringDays){
         switch(pointer.get(Calendar.DAY_OF_WEEK)){
-            case Calendar.MONDAY: return recurringDays.get(0)==1;
-            case Calendar.TUESDAY: return recurringDays.get(1)==1;
-            case Calendar.WEDNESDAY: return recurringDays.get(2)==1;
-            case Calendar.THURSDAY: return recurringDays.get(3)==1;
-            case Calendar.FRIDAY: return recurringDays.get(4)==1;
-            case Calendar.SATURDAY: return recurringDays.get(5)==1;
-            case Calendar.SUNDAY: return recurringDays.get(6)==1;
+            case Calendar.MONDAY: return recurringDays[0];
+            case Calendar.TUESDAY: return recurringDays[1];
+            case Calendar.WEDNESDAY: return recurringDays[2];
+            case Calendar.THURSDAY: return recurringDays[3];
+            case Calendar.FRIDAY: return recurringDays[4];
+            case Calendar.SATURDAY: return recurringDays[5];
+            case Calendar.SUNDAY: return recurringDays[6];
             default: return false;
         }
     }

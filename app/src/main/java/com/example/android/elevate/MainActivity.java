@@ -171,8 +171,9 @@ public class MainActivity extends AppCompatActivity
                 String title = data.getStringExtra("title");
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
+                boolean[] recurring = data.getExtras().get();
                 ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                f.insertItem(title, time1, time2);
+                f.insertItem(title, time1, time2, );
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();

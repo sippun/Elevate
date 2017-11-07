@@ -11,16 +11,16 @@ public class ToDoItem {
     String name, id;
     Calendar startTime, endTime;
     boolean done;
-    ArrayList<Integer> recurringDays;
+    boolean[] recurringDays;
 
-    public ToDoItem(String name, Calendar startTime, Calendar endTime, ArrayList<Integer> recurringDays){
+    public ToDoItem(String name, Calendar startTime, Calendar endTime, boolean[] recurringDays){
 
         this.name = name;
         this.id = name.toLowerCase()+"ID"; //eventually should use actual push function to create unique ids
         this.startTime = startTime;
         this.endTime = endTime;
         done = false;
-        this.recurringDays = new ArrayList<>(recurringDays);
+        this.recurringDays = recurringDays;
     }
 
     public String getName(){
