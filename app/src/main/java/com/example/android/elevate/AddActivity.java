@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -29,7 +30,8 @@ public class AddActivity extends AppCompatActivity {
     int currentDay, currentMonth, currentYear; //temp values to hold input
     String date1, date2;
     private Calendar time1, time2;   //actual start and end times to be passed back to main activity
-    private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    //private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    private boolean[] recurringDays = {true, true, true, true, true, true, true};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +44,18 @@ public class AddActivity extends AppCompatActivity {
         final TextView startDate = (TextView) findViewById(R.id.text_StartDate);
         final TextView endDate = (TextView) findViewById(R.id.text_EndDate);
 
-
         final EditText taskTitle = (EditText) findViewById(R.id.text_TaskTitle);
         final TextView startTime = (TextView) findViewById(R.id.text_StartTime);
         final TextView endTime = (TextView) findViewById(R.id.text_EndTime);
+
+        final CheckedTextView checkedMon = (CheckedTextView)findViewById(R.id.checkedMon);
+        final CheckedTextView checkedTue = (CheckedTextView)findViewById(R.id.checkedTue);
+        final CheckedTextView checkedWed = (CheckedTextView)findViewById(R.id.checkedWed);
+        final CheckedTextView checkedThu = (CheckedTextView)findViewById(R.id.checkedThu);
+        final CheckedTextView checkedFri = (CheckedTextView)findViewById(R.id.checkedFri);
+        final CheckedTextView checkedSat = (CheckedTextView)findViewById(R.id.checkedSat);
+        final CheckedTextView checkedSun = (CheckedTextView)findViewById(R.id.checkedSun);
+
         Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
         RadioGroup taskTypeGroup = (RadioGroup) findViewById(R.id.radio_TaskType);
         taskTypeGroup.check(R.id.radio_task);
@@ -157,24 +167,67 @@ public class AddActivity extends AppCompatActivity {
             }
         };
 
+        //check'em all
+        check(checkedMon, checkedTue, checkedWed, checkedThu, checkedFri, checkedSat, checkedSun);
+
+        checkedMon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkedMon.isChecked()){
+                    //checkedMon.setCheckMarkDrawable(0);
+                    checkedMon.setChecked(false);
+                    recurringDays[0] = false;
+                }else{
+                    //checkedMon.setCheckMarkDrawable(R.drawable.);
+                    checkedMon.setChecked(true);
+                    recurringDays[0] = true;
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //Click on create task button to bundle up task info
         //and send it back to MainActivity thru intent with RESULT_OK
         //format: Task Title, Start Time, End Time
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
-                        time1.getTimeInMillis(),
-                        time2.getTimeInMillis());
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if(user != null) {
-                    FirebaseDatabase.getInstance().getReference()
-                            .child("users")
-                            .child(user.getUid())
-                            .child("tasks")
-                            .push()
-                            .setValue(newTask);
-                }
+                //DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
+                //        time1.getTimeInMillis(),
+                //        time2.getTimeInMillis());
+                //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                //if(user != null) {
+                //    FirebaseDatabase.getInstance().getReference()
+                //            .child("users")
+                //            .child(user.getUid())
+                //            .child("tasks")
+                //            .push()
+                //            .setValue(newTask);
+                //}
 
 
                 if(taskTitle.getText().length()> 0) {
@@ -182,6 +235,7 @@ public class AddActivity extends AppCompatActivity {
                     intent.putExtra("title", taskTitle.getText().toString());
                     intent.putExtra("time1", time1);
                     intent.putExtra("time2", time2);
+                    intent.putExtra("recur", recurringDays);
                     setResult(Activity.RESULT_OK, intent);
                     finish();
                 }
@@ -192,6 +246,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
     }
+
     public void setTime(Calendar time, int hour, int minute){
         time.set(Calendar.HOUR_OF_DAY, hour);
         time.set(Calendar.MINUTE, minute);
@@ -202,4 +257,10 @@ public class AddActivity extends AppCompatActivity {
         time.set(Calendar.MONTH, month);
         time.set(Calendar.YEAR, year);
     };
+
+    public void check(CheckedTextView... blah){
+        for(CheckedTextView bla: blah){
+            bla.setChecked(true);
+        }
+    }
 }

@@ -94,8 +94,8 @@ public class ToDoFragment extends Fragment {
                     main.myDataMap.put(key, myDataset);
                     mAdapter.notifyDataSetChanged();
                 }
-                pointer.add(Calendar.DATE, 1);
             }
+            pointer.add(Calendar.DATE, 1);
         }
     }
 

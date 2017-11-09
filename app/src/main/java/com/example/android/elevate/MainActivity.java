@@ -42,24 +42,24 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
+        //mAuth = FirebaseAuth.getInstance();
+        //mAuthListener = new FirebaseAuth.AuthStateListener() {
+        //    @Override
+        //    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        //        FirebaseUser user = firebaseAuth.getCurrentUser();
+        //        if (user != null) {
+        //            // User is signed in
+        //            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+        //        } else {
                     // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    startActivityForResult(
-                            // Get an instance of AuthUI based on the default app
-                            AuthUI.getInstance().createSignInIntentBuilder().build(),
-                            RC_SIGN_IN);
-                }
-            }
-        };
+        //            Log.d(TAG, "onAuthStateChanged:signed_out");
+        //            startActivityForResult(
+        //                    // Get an instance of AuthUI based on the default app
+        //                    AuthUI.getInstance().createSignInIntentBuilder().build(),
+        //                    RC_SIGN_IN);
+        //        }
+        //    }
+        //};
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,20 +84,6 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction().
                 add(R.id.fragment_container, new ToDoFragment()).commit();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
 
     @Override
@@ -171,9 +157,9 @@ public class MainActivity extends AppCompatActivity
                 String title = data.getStringExtra("title");
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
-                boolean[] recurring = data.getExtras().get();
+                boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
                 ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                f.insertItem(title, time1, time2, );
+                f.insertItem(title, time1, time2, recurringDays);
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
