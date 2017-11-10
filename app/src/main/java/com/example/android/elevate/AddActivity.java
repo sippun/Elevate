@@ -170,45 +170,112 @@ public class AddActivity extends AppCompatActivity {
         //check'em all
         check(checkedMon, checkedTue, checkedWed, checkedThu, checkedFri, checkedSat, checkedSun);
 
+        //Checked behaviors for each weekday.
+        //Checking a weekday turns its corresponding recurringDays[] entry to true
         checkedMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(checkedMon.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(0);
+                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedMon.setChecked(false);
                     recurringDays[0] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
+                    //checkedMon.setCheckMarkDrawable();
                     checkedMon.setChecked(true);
                     recurringDays[0] = true;
                 }
             }
         });
 
+        checkedTue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkedTue.isChecked()){
+                    //checkedMon.setCheckMarkDrawable(R.drawable.);
+                    checkedTue.setChecked(false);
+                    recurringDays[1] = false;
+                }else{
+                    //checkedMon.setCheckMarkDrawable();
+                    checkedTue.setChecked(true);
+                    recurringDays[1] = true;
+                }
+            }
+        });
 
+        checkedWed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkedWed.isChecked()){
+                    //checkedMon.setCheckMarkDrawable(R.drawable.);
+                    checkedWed.setChecked(false);
+                    recurringDays[2] = false;
+                }else{
+                    //checkedMon.setCheckMarkDrawable();
+                    checkedWed.setChecked(true);
+                    recurringDays[2] = true;
+                }
+            }
+        });
 
+        checkedThu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkedThu.isChecked()){
+                    //checkedMon.setCheckMarkDrawable(R.drawable.);
+                    checkedThu.setChecked(false);
+                    recurringDays[3] = false;
+                }else{
+                    //checkedMon.setCheckMarkDrawable();
+                    checkedThu.setChecked(true);
+                    recurringDays[3] = true;
+                }
+            }
+        });
 
+        checkedFri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkedFri.isChecked()){
+                    //checkedMon.setCheckMarkDrawable(R.drawable.);
+                    checkedFri.setChecked(false);
+                    recurringDays[4] = false;
+                }else{
+                    //checkedMon.setCheckMarkDrawable();
+                    checkedFri.setChecked(true);
+                    recurringDays[4] = true;
+                }
+            }
+        });
 
+        checkedSat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkedSat.isChecked()){
+                    //checkedMon.setCheckMarkDrawable(R.drawable.);
+                    checkedSat.setChecked(false);
+                    recurringDays[5] = false;
+                }else{
+                    //checkedMon.setCheckMarkDrawable();
+                    checkedSat.setChecked(true);
+                    recurringDays[5] = true;
+                }
+            }
+        });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        checkedSun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkedSun.isChecked()){
+                    //checkedMon.setCheckMarkDrawable(R.drawable.);
+                    checkedSun.setChecked(false);
+                    recurringDays[6] = false;
+                }else{
+                    //checkedMon.setCheckMarkDrawable();
+                    checkedSun.setChecked(true);
+                    recurringDays[6] = true;
+                }
+            }
+        });
 
         //Click on create task button to bundle up task info
         //and send it back to MainActivity thru intent with RESULT_OK
@@ -228,7 +295,6 @@ public class AddActivity extends AppCompatActivity {
                 //            .push()
                 //            .setValue(newTask);
                 //}
-
 
                 if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);

@@ -79,7 +79,7 @@ public class ToDoFragment extends Fragment {
         //pointer starts at startTime and increments towards endTime
         Calendar pointer = (Calendar)startTime.clone();
         while(pointer.before(endTime)) {
-            //check if pointer's weekday is set to recur
+            //check if pointer's weekday is to be recurred
             if (checkWeekDayRecur(pointer, recurringDays)) {
                 //hashmap key = "day:year"
                 //if hashmap doesn't contain key, insert item into a new list
@@ -99,7 +99,7 @@ public class ToDoFragment extends Fragment {
         }
     }
 
-    //return true if recurList has pointer's weekday flagged as 1
+    //return true if recurList has pointer's weekday flagged as true
     public boolean checkWeekDayRecur(Calendar pointer, boolean[] recurringDays){
         switch(pointer.get(Calendar.DAY_OF_WEEK)){
             case Calendar.MONDAY: return recurringDays[0];

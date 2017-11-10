@@ -32,13 +32,10 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
-        public ToggleButton nameToggleButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             nameTextView = itemView.findViewById(R.id.todo_name);
-            nameToggleButton = itemView.findViewById(R.id.todo_toggle);
         }
     }
 
