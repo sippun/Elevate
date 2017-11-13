@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 26
@@ -11,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resConfigs "auto"
     }
     buildTypes {
         release {
@@ -19,6 +19,16 @@ android {
         }
     }
 }
+
+allprojects {
+    repositories {
+        maven {
+            url "https://maven.google.com"
+        }
+        jcenter()
+    }
+}
+
 
 dependencies {
 
@@ -32,8 +42,15 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support:support-v4:26.0.0-alpha1'
     compile 'com.android.support:design:26.0.0-alpha1'
+    compile 'com.google.firebase:firebase-database:11.0.4'
+    compile 'com.google.firebase:firebase-auth:11.0.4'
+
+    compile 'com.firebaseui:firebase-ui-auth:2.3.0'
+    compile "com.google.android.gms:play-services-auth:11.0.4"
+
+    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
+    compile "com.android.support:customtabs:26.0.1"
+    compile "com.android.support:cardview-v7:26.0.1"
+
     testCompile 'junit:junit:4.12'
 }
-
-
-apply plugin: 'com.google.gms.google-services'
