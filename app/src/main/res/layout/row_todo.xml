@@ -11,13 +11,4 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp" />
 
-    <ToggleButton
-        android:id="@+id/todo_toggle"
-        android:layout_width="74dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:checked="false"
-        android:textOff=" "
-        android:textOn="Done" />
-
 </LinearLayout>

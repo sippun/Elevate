@@ -50,7 +50,6 @@ public class ToDoFragment extends Fragment {
                 cal.get(Calendar.YEAR);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,35 +60,6 @@ public class ToDoFragment extends Fragment {
   
         myDataset = new ArrayList<ToDoItem>();
         final Calendar cal = Calendar.getInstance();
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference tasks = database.getReference(userDataPath+"/tasks");
-
-        tasks.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot task : dataSnapshot.getChildren()) {
-                    ToDoItem item = task.getValue(ToDoItem.class);
-                    myDataset.add(new ToDoItem(item.name, cal, cal));
-                    Log.d("TaskList", item.name);
-                }
-
-                mAdapter = new ToDoAdapter(myDataset);
-                mRecyclerView.setAdapter(mAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("TaskList", "Something went wrong with getting the existing tasks");
-            }
-        });
-
-        //initiate dummy list with current time as start/end time
-        ArrayList<ToDoItem> myDataset = new ArrayList<>();
-        myDataset.add(new ToDoItem("Eat", cal, cal));
-        myDataset.add(new ToDoItem("Sleep", cal ,cal));
-        myDataset.add(new ToDoItem("Code", cal, cal));
-        myDataset.add(new ToDoItem("Repeat", cal, cal));
 
         main = (MainActivity)getActivity();
 
@@ -104,24 +74,42 @@ public class ToDoFragment extends Fragment {
     }
 
     //insert to-do item into lists from startTime to endTime
-    public void insertItem(String name, Calendar startTime, Calendar endTime){
+    public void insertItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays){
 
         //pointer starts at startTime and increments towards endTime
         Calendar pointer = (Calendar)startTime.clone();
-        while(pointer.before(endTime)){
-
-            //hashmap key = "day:year"
-            String key = pointer.get(Calendar.DAY_OF_YEAR)+":"+pointer.get(Calendar.YEAR);
-            if(main.myDataMap.get(key)!=null){
-                main.myDataMap.get(key).add(new ToDoItem(name, startTime, endTime));
-                mAdapter.notifyDataSetChanged();
-            }else{
-                ArrayList<ToDoItem> myDataset = new ArrayList<>();
-                myDataset.add(new ToDoItem(name, startTime, endTime));
-                main.myDataMap.put(key, myDataset);
-                mAdapter.notifyDataSetChanged();
+        while(pointer.before(endTime)) {
+            //check if pointer's weekday is to be recurred
+            if (checkWeekDayRecur(pointer, recurringDays)) {
+                //hashmap key = "day:year"
+                //if hashmap doesn't contain key, insert item into a new list
+                //otherwise insert item into existing list, then increment pointer by 1 day
+                String key = pointer.get(Calendar.DAY_OF_YEAR) + ":" + pointer.get(Calendar.YEAR);
+                if (main.myDataMap.get(key) != null) {
+                    main.myDataMap.get(key).add(new ToDoItem(name, startTime, endTime, recurringDays));
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    ArrayList<ToDoItem> myDataset = new ArrayList<>();
+                    myDataset.add(new ToDoItem(name, startTime, endTime, recurringDays));
+                    main.myDataMap.put(key, myDataset);
+                    mAdapter.notifyDataSetChanged();
+                }
             }
             pointer.add(Calendar.DATE, 1);
+        }
+    }
+
+    //return true if recurList has pointer's weekday flagged as true
+    public boolean checkWeekDayRecur(Calendar pointer, boolean[] recurringDays){
+        switch(pointer.get(Calendar.DAY_OF_WEEK)){
+            case Calendar.MONDAY: return recurringDays[0];
+            case Calendar.TUESDAY: return recurringDays[1];
+            case Calendar.WEDNESDAY: return recurringDays[2];
+            case Calendar.THURSDAY: return recurringDays[3];
+            case Calendar.FRIDAY: return recurringDays[4];
+            case Calendar.SATURDAY: return recurringDays[5];
+            case Calendar.SUNDAY: return recurringDays[6];
+            default: return false;
         }
     }
 }
