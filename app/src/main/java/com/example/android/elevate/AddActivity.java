@@ -283,9 +283,7 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
-                //        time1.getTimeInMillis(),
-                //        time2.getTimeInMillis());
+
                 //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 //if(user != null) {
                 //    FirebaseDatabase.getInstance().getReference()
