@@ -1,10 +1,19 @@
 package com.example.android.elevate;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,7 +35,6 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             nameTextView = itemView.findViewById(R.id.todo_name);
         }
     }
@@ -53,6 +61,8 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         ToDoItem item = items.get(position);
+
+        final String itemID = item.getId();
 
         TextView textView = holder.nameTextView;
         textView.setText(item.getName() + "  "+
