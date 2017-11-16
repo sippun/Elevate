@@ -176,11 +176,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedMon.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedMon.setChecked(false);
                     recurringDays[0] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedMon.setChecked(true);
                     recurringDays[0] = true;
                 }
@@ -191,11 +189,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedTue.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedTue.setChecked(false);
                     recurringDays[1] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedTue.setChecked(true);
                     recurringDays[1] = true;
                 }
@@ -206,11 +202,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedWed.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedWed.setChecked(false);
                     recurringDays[2] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedWed.setChecked(true);
                     recurringDays[2] = true;
                 }
@@ -221,11 +215,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedThu.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedThu.setChecked(false);
                     recurringDays[3] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedThu.setChecked(true);
                     recurringDays[3] = true;
                 }
@@ -236,11 +228,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedFri.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedFri.setChecked(false);
                     recurringDays[4] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedFri.setChecked(true);
                     recurringDays[4] = true;
                 }
@@ -251,11 +241,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedSat.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedSat.setChecked(false);
                     recurringDays[5] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedSat.setChecked(true);
                     recurringDays[5] = true;
                 }
@@ -266,11 +254,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedSun.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedSun.setChecked(false);
                     recurringDays[6] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedSun.setChecked(true);
                     recurringDays[6] = true;
                 }
@@ -284,15 +270,18 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
 
-                //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                //if(user != null) {
-                //    FirebaseDatabase.getInstance().getReference()
-                //            .child("users")
-                //            .child(user.getUid())
-                //            .child("tasks")
-                //            .push()
-                //            .setValue(newTask);
-                //}
+                DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
+                        time1.getTimeInMillis(),
+                        time2.getTimeInMillis());
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user != null) {
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("tasks")
+                            .push()
+                            .setValue(newTask);
+                }
 
                 if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);

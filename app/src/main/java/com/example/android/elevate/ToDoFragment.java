@@ -78,7 +78,7 @@ public class ToDoFragment extends Fragment {
 
         //pointer starts at startTime and increments towards endTime
         Calendar pointer = (Calendar)startTime.clone();
-        while(pointer.before(endTime)) {
+        while(pointer.before(endTime) || pointer.equals(endTime)) {
             //check if pointer's weekday is to be recurred
             if (checkWeekDayRecur(pointer, recurringDays)) {
                 //hashmap key = "day:year"

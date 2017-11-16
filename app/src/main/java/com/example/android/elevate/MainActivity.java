@@ -44,24 +44,24 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //mAuth = FirebaseAuth.getInstance();
-        //mAuthListener = new FirebaseAuth.AuthStateListener() {
-        //    @Override
-        //    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        //        FirebaseUser user = firebaseAuth.getCurrentUser();
-        //        if (user != null) {
-        //            // User is signed in
-        //            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-        //        } else {
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
                     // User is signed out
-        //            Log.d(TAG, "onAuthStateChanged:signed_out");
-        //            startActivityForResult(
-        //                    // Get an instance of AuthUI based on the default app
-        //                    AuthUI.getInstance().createSignInIntentBuilder().build(),
-        //                    RC_SIGN_IN);
-        //        }
-        //    }
-        //};
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    startActivityForResult(
+                            // Get an instance of AuthUI based on the default app
+                            AuthUI.getInstance().createSignInIntentBuilder().build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
