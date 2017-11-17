@@ -202,11 +202,8 @@ public class MainActivity extends AppCompatActivity
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         assert alarmManager != null;
-        alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                startTime.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 }
