@@ -1,9 +1,12 @@
 package com.example.android.elevate;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -159,13 +162,44 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+                ToDoFragment f = (ToDoFragment) getSupportFragmentManager().
+                        findFragmentById(R.id.fragment_container);
+
+                //pass ToDoItem parameters to insert function in ToDoFragment
                 f.insertItem(title, time1, time2, recurringDays);
+                createNotification(title, time1);
+
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
             }
         }
+    }
+
+    public void createNotification(String title, Calendar startTime){
+
+        // Setting intent to class where Alarm broadcast message will be handled
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.setAction("com.example.android.elevate.MY_NOTIFICATION");
+        intent.putExtra("title", title);
+
+        // Pending Intent for if user clicks on notification
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,0, intent, 0);
+
+        Toast.makeText(this, "notification created at "+startTime.getTime(),
+                Toast.LENGTH_LONG).show();
+
+        // Get instance of AlarmManager service
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        assert alarmManager != null;
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                startTime.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent);
     }
 
 }
