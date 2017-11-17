@@ -44,14 +44,13 @@ public class AddActivity extends AppCompatActivity {
         taskTitle = (EditText) findViewById(R.id.text_TaskTitle);
 
         RadioGroup taskTypeGroup = (RadioGroup) findViewById(R.id.radio_TaskType);
-        
+
         taskTypeGroup.check(R.id.radio_task);
         inflateAddTask();
 
         taskTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                 switch (checkedId) {
                     case R.id.radio_habit:
                         removeInputType();
@@ -104,6 +103,37 @@ public class AddActivity extends AppCompatActivity {
             recurringDays[i] = !recurringDays[i];
         }
 
+        Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
+        button_AddTask.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                DBHabitItem newHabit = new DBHabitItem(taskTitle.getText().toString(),
+                        recurringDays);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user != null && newHabit != null) {
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("habits")
+                            .push()
+                            .setValue(newHabit);
+                }
+
+                if(taskTitle.getText().length()> 0) {
+                    Intent intent = new Intent(AddActivity.this, MainActivity.class);
+                    intent.putExtra("title", taskTitle.getText().toString());
+                    intent.putExtra("time1", time1);
+                    intent.putExtra("time2", time2);
+                    intent.putExtra("recur", recurringDays);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                }
+                else{
+                    Intent intent = new Intent(AddActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void inflateAddTask() {
