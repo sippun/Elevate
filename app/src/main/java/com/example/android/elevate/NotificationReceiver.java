@@ -8,8 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
-
 
 /**
  * Created by katierosengrant on 10/29/17.
@@ -19,9 +20,11 @@ import android.support.v4.app.NotificationCompat;
  */
 
 class NotificationReceiver extends BroadcastReceiver {
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
         // Notification built here
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         int NOTIFICATION_ID = 101;
@@ -29,6 +32,8 @@ class NotificationReceiver extends BroadcastReceiver {
         String CHANNEL_ID = "my_channel_01";
         CharSequence name = "habit reminder channel name";
         String description = "habit reminder channel description";
+        String taskTitle = intent.getStringExtra("title");
+        System.out.print(taskTitle);
 
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
@@ -42,14 +47,14 @@ class NotificationReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(android.R.color.transparent) /* required */
                         .setContentTitle("Elevate")
-                        .setContentText("Have you completed your daily habits?");
+                        .setContentText("Have you started"+" "+taskTitle+"?");
 
-        Intent resultIntent = new Intent(context, RepeatingActivity.class);
+        Intent resultIntent = new Intent(context, MainActivity.class);
 
         // This ensures that navigating backward from the Activity leads out of
         // your app to the Home screen.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(RepeatingActivity.class);
+        stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
