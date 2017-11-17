@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +22,8 @@ import java.util.List;
 
 public class DataBase {
     private final String TAG="DataBaseTag";
-    private static final String userDataPath = "users/"+ FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final String userDataPath = "users/"+ user.getUid();
     public HashMap<String,ArrayList<ToDoItem>> dayToItemsMap = new HashMap<>();
     private HashMap<String,RecyclerView.Adapter> dayToAdapterMap = new HashMap<>();
     public ArrayList<ToDoItem> activeItemsList = new ArrayList<ToDoItem>();
@@ -41,17 +43,18 @@ public class DataBase {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot task : dataSnapshot.getChildren()) {
                     ToDoItem item = new ToDoItem(task.getValue(DBTaskItem.class));
+                    item.setId(task.getKey());
 
                     if(item != null) {
-                        insertItem(item/*, mAdapter*/);
                         Log.d(TAG+"TaskList", item.name);
+                        insertItem(item);
                     }else{
                         Log.d(TAG+"TaskList", "item = null");
                     }
                 }
 
                 mAdapter.notifyDataSetChanged();
-                Log.d(TAG, dayToItemsMap.toString());
+                Log.d(TAG+"Final", dayToItemsMap.toString());
             }
 
             @Override
@@ -65,33 +68,51 @@ public class DataBase {
 
 
     //insert to-do item into lists from startTime to endTime
-    public void insertItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays/*, RecyclerView.Adapter mAdapter*/){
-        //pointer starts at startTime and increments towards endTime
-        Calendar pointer = (Calendar)startTime.clone();
-        while(pointer.compareTo(endTime) <= 0) { //before or at this date
-            //check if pointer's weekday is to be recurred
-            if (checkWeekDayRecur(pointer, recurringDays)) {
+    public void insertNewItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays){
+        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays);
 
+        if(user != null) {
+            Log.d(TAG+"addTask", item.toString());
+            DatabaseReference ref= FirebaseDatabase.getInstance().getReference()
+                    .child("users")
+                    .child(user.getUid())
+                    .child("tasks");
+            String key = ref.push().getKey();
+            item.setId(key);
+            ref.child("/"+key).setValue( item.createDataBaseEntry());
+
+            insertItem(item);
+        }else{
+            Log.d(TAG+"addTask", "user =null");
+        }
+
+    }
+
+    public void insertItem(ToDoItem item){
+        //pointer starts at startTime and increments towards endTime
+        Calendar pointer = (Calendar)item.getStartTime().clone();
+        while(pointer.compareTo(item.getEndTime()) <= 0) { //before or at this date
+            //check if pointer's weekday is to be recurred
+            if (checkWeekDayRecur(pointer, item.getRecurringDays())) {
                 //hashmap key = "day:year"
                 //if hashmap doesn't contain key, insert item into a new list
                 //otherwise insert item into existing list, then increment pointer by 1 day
                 String key = pointer.get(Calendar.DAY_OF_YEAR) + ":" + pointer.get(Calendar.YEAR);
-                if (dayToItemsMap.get(key) != null) {
-                    dayToItemsMap.get(key).add(new ToDoItem(name, startTime, endTime, recurringDays));
+
+                ArrayList<ToDoItem> toDoList = dayToItemsMap.get(key);
+                if (toDoList != null) {
+                    if (!itemInList(toDoList, item.id)) {
+                        toDoList.add(item);
+                    }
                 } else {
-                    ArrayList<ToDoItem> myDataset = new ArrayList<>();
-                    myDataset.add(new ToDoItem(name, startTime, endTime, recurringDays));
-                    dayToItemsMap.put(key, myDataset);
+                    toDoList = new ArrayList<>();
+                    toDoList.add(item);
+                    dayToItemsMap.put(key, toDoList);
                 }
                 Log.d(TAG+" afterInsert", dayToItemsMap.toString());
-                //mAdapter.notifyDataSetChanged();
             }
             pointer.add(Calendar.DATE, 1);
         }
-    }
-
-    public void insertItem(ToDoItem item/*, RecyclerView.Adapter mAdapter*/){
-        insertItem(item.name, item.getStartTime(), item.getEndTime(), item.getRecurringDays()/*, mAdapter*/);
     }
 
     //return true if recurList has pointer's weekday flagged as true
@@ -106,5 +127,18 @@ public class DataBase {
             case Calendar.SUNDAY: return recurringDays[6];
             default: return false;
         }
+    }
+
+    boolean itemInList(List<ToDoItem> toDoList, String id){
+        Log.d("LoopStart", toDoList.toString());
+        for (ToDoItem item: toDoList) {
+            Log.d("LoopItter", item.getId() +" vs "+ id);
+            if(item.getId() == id) {
+                Log.d("LoopEnd", "true");
+                return true;
+            }
+        }
+        Log.d("LoopEnd", "false");
+        return false;
     }
 }

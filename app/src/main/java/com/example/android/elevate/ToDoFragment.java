@@ -71,7 +71,7 @@ public class ToDoFragment extends Fragment {
         dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
 
         mRecyclerView.setAdapter(mAdapter);
-        //mAdapter.notifyDataSetChanged();
+
         return rootView;
     }
 
