@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,12 +25,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ToDoFragment extends Fragment {
+    private static final String TAG = "ToDoFragTag";
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public ArrayList<ToDoItem> myDataset;
-    private static final String userDataPath = "bethsTestTree";
 
     String day_year;
     Calendar cal;
@@ -57,22 +58,29 @@ public class ToDoFragment extends Fragment {
         mRecyclerView = rootView.findViewById(R.id.recycler_view_todo);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-  
-        myDataset = new ArrayList<ToDoItem>();
-        final Calendar cal = Calendar.getInstance();
 
         main = (MainActivity)getActivity();
+        DataBase dataBase = main.database;
 
-        if(main.myDataMap.get(day_year) == null) {
-            main.myDataMap.put(day_year, myDataset);
+        if(dataBase.dayToItemsMap.get(day_year) == null) {
+            dataBase.dayToItemsMap.put(day_year, main.database.activeItemsList);
         }
 
-        mAdapter = new ToDoAdapter(main.myDataMap.get(day_year));
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter = new ToDoAdapter(dataBase.dayToItemsMap.get(day_year));
 
+        dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
+
+        mRecyclerView.setAdapter(mAdapter);
+        //mAdapter.notifyDataSetChanged();
         return rootView;
     }
 
+<<<<<<< HEAD
+    @Override
+    public void onResume(){
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
+=======
     //insert to-do item into lists from startTime to endTime
     public void insertItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays){
 
@@ -97,19 +105,8 @@ public class ToDoFragment extends Fragment {
             }
             pointer.add(Calendar.DATE, 1);
         }
+>>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
     }
 
-    //return true if recurList has pointer's weekday flagged as true
-    public boolean checkWeekDayRecur(Calendar pointer, boolean[] recurringDays){
-        switch(pointer.get(Calendar.DAY_OF_WEEK)){
-            case Calendar.MONDAY: return recurringDays[0];
-            case Calendar.TUESDAY: return recurringDays[1];
-            case Calendar.WEDNESDAY: return recurringDays[2];
-            case Calendar.THURSDAY: return recurringDays[3];
-            case Calendar.FRIDAY: return recurringDays[4];
-            case Calendar.SATURDAY: return recurringDays[5];
-            case Calendar.SUNDAY: return recurringDays[6];
-            default: return false;
-        }
-    }
+
 }
