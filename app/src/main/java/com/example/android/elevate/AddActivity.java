@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
-
+    private static final String TAG = "AddActTag";
     DatePickerDialog.OnDateSetListener dListener1, dListener2;
     TimePickerDialog.OnTimeSetListener tListener1, tListener2;
     int currentDay, currentMonth, currentYear; //temp values to hold input
@@ -285,22 +285,25 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
+                ToDoItem newTask = new ToDoItem(taskTitle.getText().toString(),
                         time1.getTimeInMillis(),
-                        time2.getTimeInMillis());
+                        time2.getTimeInMillis(),
+                        recurringDays);
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                Log.d("addTask", newTask.name);
+                Log.d(TAG+"addTask", newTask.name);
 
                 if(user != null) {
+                    Log.d(TAG+"addTask", newTask.toString());
                     FirebaseDatabase.getInstance().getReference()
                             .child("users")
                             .child(user.getUid())
                             .child("tasks")
                             .push()
-                            .setValue(newTask);
+                            .setValue(newTask.createDataBaseEntry());
                 }else{
-                    Log.d("addTask", "user =null");
+                    Log.d(TAG+"addTask", "user =null");
                 }
 
                 if(taskTitle.getText().length()> 0) {

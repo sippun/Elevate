@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity
     private static final int RC_SIGN_IN = 123;
 
     //Hashmap stores <DAY, TODOITEM> pairs
-    public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
+    //public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
+    public DataBase database = new DataBase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,8 +166,8 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                f.insertItem(title, time1, time2, recurringDays);
+                //ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                database.insertItem(title, time1, time2, recurringDays);
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
