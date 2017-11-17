@@ -178,11 +178,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedMon.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedMon.setChecked(false);
                     recurringDays[0] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedMon.setChecked(true);
                     recurringDays[0] = true;
                 }
@@ -193,11 +191,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedTue.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedTue.setChecked(false);
                     recurringDays[1] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedTue.setChecked(true);
                     recurringDays[1] = true;
                 }
@@ -208,11 +204,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedWed.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedWed.setChecked(false);
                     recurringDays[2] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedWed.setChecked(true);
                     recurringDays[2] = true;
                 }
@@ -223,11 +217,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedThu.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedThu.setChecked(false);
                     recurringDays[3] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedThu.setChecked(true);
                     recurringDays[3] = true;
                 }
@@ -238,11 +230,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedFri.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedFri.setChecked(false);
                     recurringDays[4] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedFri.setChecked(true);
                     recurringDays[4] = true;
                 }
@@ -253,11 +243,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedSat.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedSat.setChecked(false);
                     recurringDays[5] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedSat.setChecked(true);
                     recurringDays[5] = true;
                 }
@@ -268,11 +256,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkedSun.isChecked()){
-                    //checkedMon.setCheckMarkDrawable(R.drawable.);
                     checkedSun.setChecked(false);
                     recurringDays[6] = false;
                 }else{
-                    //checkedMon.setCheckMarkDrawable();
                     checkedSun.setChecked(true);
                     recurringDays[6] = true;
                 }
@@ -285,14 +271,25 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+<<<<<<< HEAD
                 ToDoItem newTask = new ToDoItem(taskTitle.getText().toString(),
+=======
+
+                DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
+>>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
                         time1.getTimeInMillis(),
                         time2.getTimeInMillis(),
                         recurringDays);
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+<<<<<<< HEAD
                 Log.d(TAG+"addTask", newTask.name);
+=======
+
+                Log.d("addTask", newTask.name);
+>>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
+
 
                 if(user != null) {
                     Log.d(TAG+"addTask", newTask.toString());
@@ -301,9 +298,17 @@ public class AddActivity extends AppCompatActivity {
                             .child(user.getUid())
                             .child("tasks")
                             .push()
+<<<<<<< HEAD
                             .setValue(newTask.createDataBaseEntry());
                 }else{
                     Log.d(TAG+"addTask", "user =null");
+=======
+                            .setValue(newTask);
+
+                }else{
+                    Log.d("addTask", "user =null");
+
+>>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
                 }
 
                 if(taskTitle.getText().length()> 0) {

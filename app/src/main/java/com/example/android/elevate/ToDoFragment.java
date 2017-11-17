@@ -75,10 +75,37 @@ public class ToDoFragment extends Fragment {
         return rootView;
     }
 
+<<<<<<< HEAD
     @Override
     public void onResume(){
         super.onResume();
         mAdapter.notifyDataSetChanged();
+=======
+    //insert to-do item into lists from startTime to endTime
+    public void insertItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays){
+
+        //pointer starts at startTime and increments towards endTime
+        Calendar pointer = (Calendar)startTime.clone();
+        while(pointer.before(endTime) || pointer.equals(endTime)) {
+            //check if pointer's weekday is to be recurred
+            if (checkWeekDayRecur(pointer, recurringDays)) {
+                //hashmap key = "day:year"
+                //if hashmap doesn't contain key, insert item into a new list
+                //otherwise insert item into existing list, then increment pointer by 1 day
+                String key = pointer.get(Calendar.DAY_OF_YEAR) + ":" + pointer.get(Calendar.YEAR);
+                if (main.myDataMap.get(key) != null) {
+                    main.myDataMap.get(key).add(new ToDoItem(name, startTime, endTime, recurringDays));
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    ArrayList<ToDoItem> myDataset = new ArrayList<>();
+                    myDataset.add(new ToDoItem(name, startTime, endTime, recurringDays));
+                    main.myDataMap.put(key, myDataset);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+            pointer.add(Calendar.DATE, 1);
+        }
+>>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
     }
 
 
