@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -31,7 +32,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivityTag";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -46,23 +47,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mAuth = FirebaseAuth.getInstance();
+
+
+        userLogin(mAuth);
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    startActivityForResult(
-                            // Get an instance of AuthUI based on the default app
-                            AuthUI.getInstance().createSignInIntentBuilder().build(),
-                            RC_SIGN_IN);
-                }
+                userLogin(firebaseAuth);
+
             }
         };
 
@@ -89,6 +83,22 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction().
                 add(R.id.fragment_container, new ToDoFragment()).commit();
+    }
+
+    private void userLogin(FirebaseAuth firebaseAuth){
+        Log.d(TAG, "onAuthChanged");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+        } else {
+            // User is signed out
+            Log.d(TAG, "onAuthStateChanged:signed_out");
+            startActivityForResult(
+                    // Get an instance of AuthUI based on the default app
+                    AuthUI.getInstance().createSignInIntentBuilder().build(),
+                    RC_SIGN_IN);
+        }
     }
 
     @Override
