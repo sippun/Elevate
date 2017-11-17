@@ -3,10 +3,13 @@ package com.example.android.elevate;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
@@ -19,8 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
@@ -32,21 +33,50 @@ public class AddActivity extends AppCompatActivity {
     private Calendar time1, time2;   //actual start and end times to be passed back to main activity
     //private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     private boolean[] recurringDays = {true, true, true, true, true, true, true};
+    private EditText taskTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         setTitle("New Task");
+        taskTitle = (EditText) findViewById(R.id.text_TaskTitle);
+
+        RadioGroup taskTypeGroup = (RadioGroup) findViewById(R.id.radio_TaskType);
+        taskTypeGroup.check(R.id.radio_task);
+
+        taskTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radio_habit:
+                        break;
+                    case R.id.radio_task:
+                        ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
+                        parent.removeAllViews();
+                        inflateAddTask();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void inflateAddTask() {
+
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
+        View addTaskView = inflater.inflate(R.layout.input_add_task, parent);
         final Calendar cal = Calendar.getInstance();
 
         //set up layout components of addTask page
         final TextView startDate = (TextView) findViewById(R.id.text_StartDate);
         final TextView endDate = (TextView) findViewById(R.id.text_EndDate);
 
-        final EditText taskTitle = (EditText) findViewById(R.id.text_TaskTitle);
         final TextView startTime = (TextView) findViewById(R.id.text_StartTime);
         final TextView endTime = (TextView) findViewById(R.id.text_EndTime);
+
+        Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
 
         final CheckedTextView checkedMon = (CheckedTextView)findViewById(R.id.checkedMon);
         final CheckedTextView checkedTue = (CheckedTextView)findViewById(R.id.checkedTue);
@@ -55,11 +85,6 @@ public class AddActivity extends AppCompatActivity {
         final CheckedTextView checkedFri = (CheckedTextView)findViewById(R.id.checkedFri);
         final CheckedTextView checkedSat = (CheckedTextView)findViewById(R.id.checkedSat);
         final CheckedTextView checkedSun = (CheckedTextView)findViewById(R.id.checkedSun);
-
-        Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
-        RadioGroup taskTypeGroup = (RadioGroup) findViewById(R.id.radio_TaskType);
-        taskTypeGroup.check(R.id.radio_task);
-
         //retrieve date info from intent by TasksActivity. default set to 1/1/2017
         time1 = Calendar.getInstance();
         time2 = Calendar.getInstance();
