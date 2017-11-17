@@ -25,6 +25,7 @@
             android:label="@string/title_activity_add"
             android:parentActivityName=".MainActivity">
         </activity>
+        <receiver android:name=".NotificationReceiver" />
     </application>
 
 </manifest>

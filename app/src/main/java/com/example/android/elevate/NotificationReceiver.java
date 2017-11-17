@@ -19,7 +19,7 @@ import android.support.v4.app.NotificationCompat;
  * Change notification text/appearance here.
  */
 
-class NotificationReceiver extends BroadcastReceiver {
+public class NotificationReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {

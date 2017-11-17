@@ -45,14 +45,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(MainActivity.this, NotificationReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        60 * 100, alarmIntent);
-
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -186,18 +178,15 @@ public class MainActivity extends AppCompatActivity
     public void createNotification(String title, Calendar startTime){
 
         // Setting intent to class where Alarm broadcast message will be handled
-        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        Intent intent = new Intent(this, NotificationReceiver.class);
         intent.setAction("com.example.android.elevate.MY_NOTIFICATION");
         intent.putExtra("title", title);
 
         // Pending Intent for if user clicks on notification
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                getApplicationContext(),
-                100,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                this,0, intent, 0);
 
-        Toast.makeText(getApplicationContext(), "notification created at "+startTime.getTime(),
+        Toast.makeText(this, "notification created at "+startTime.getTime(),
                 Toast.LENGTH_LONG).show();
 
         // Get instance of AlarmManager service
@@ -209,8 +198,6 @@ public class MainActivity extends AppCompatActivity
                 startTime.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY,
                 pendingIntent);
-
-        //sendBroadcast(intent);
     }
 
 }
