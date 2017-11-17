@@ -63,6 +63,8 @@ public class AddActivity extends AppCompatActivity {
         //retrieve date info from intent by TasksActivity. default set to 1/1/2017
         time1 = Calendar.getInstance();
         time2 = Calendar.getInstance();
+        time1.set(Calendar.SECOND, 0);
+        time2.set(Calendar.SECOND, 0);
         currentDay = getIntent().getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH));
         currentMonth = getIntent().getIntExtra("month", cal.get(Calendar.MONTH)+1);
         currentYear = getIntent().getIntExtra("year",cal.get(Calendar.YEAR));
