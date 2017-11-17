@@ -3,11 +3,14 @@ package com.example.android.elevate;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
@@ -21,8 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
@@ -34,21 +36,47 @@ public class AddActivity extends AppCompatActivity {
     private Calendar time1, time2;   //actual start and end times to be passed back to main activity
     //private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     private boolean[] recurringDays = {true, true, true, true, true, true, true};
+    private EditText taskTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         setTitle("New Task");
-        final Calendar cal = Calendar.getInstance();
+        taskTitle = (EditText) findViewById(R.id.text_TaskTitle);
 
-        //set up layout components of addTask page
-        final TextView startDate = (TextView) findViewById(R.id.text_StartDate);
-        final TextView endDate = (TextView) findViewById(R.id.text_EndDate);
+        RadioGroup taskTypeGroup = (RadioGroup) findViewById(R.id.radio_TaskType);
 
-        final EditText taskTitle = (EditText) findViewById(R.id.text_TaskTitle);
-        final TextView startTime = (TextView) findViewById(R.id.text_StartTime);
-        final TextView endTime = (TextView) findViewById(R.id.text_EndTime);
+        taskTypeGroup.check(R.id.radio_task);
+        inflateAddTask();
+
+        taskTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radio_habit:
+                        removeInputType();
+                        inflateAddHabit();
+                        break;
+                    case R.id.radio_task:
+                        removeInputType();
+                        inflateAddTask();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void removeInputType() {
+        ViewGroup parent = findViewById(R.id.add_input_layout);
+        parent.removeAllViews();
+    }
+
+    private void inflateAddHabit() {
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
+        View addHabitView = inflater.inflate(R.layout.input_add_habit, parent);
 
         final CheckedTextView checkedMon = (CheckedTextView)findViewById(R.id.checkedMon);
         final CheckedTextView checkedTue = (CheckedTextView)findViewById(R.id.checkedTue);
@@ -58,9 +86,74 @@ public class AddActivity extends AppCompatActivity {
         final CheckedTextView checkedSat = (CheckedTextView)findViewById(R.id.checkedSat);
         final CheckedTextView checkedSun = (CheckedTextView)findViewById(R.id.checkedSun);
 
+        final ArrayList<CheckedTextView> checkDays = new ArrayList<CheckedTextView>() {
+            {
+                add(checkedMon); add(checkedTue); add(checkedWed); add(checkedThu);
+                add(checkedFri); add(checkedSat); add(checkedSun);
+            }
+        };
+
+        for(int i = 0; i < checkDays.size(); i++) {
+            final CheckedTextView dayCheckView = checkDays.get(i);
+            dayCheckView.setChecked(true);
+            dayCheckView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dayCheckView.toggle();
+                }
+            });
+            recurringDays[i] = !recurringDays[i];
+        }
+
         Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
-        RadioGroup taskTypeGroup = (RadioGroup) findViewById(R.id.radio_TaskType);
-        taskTypeGroup.check(R.id.radio_task);
+        button_AddTask.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                DBHabitItem newHabit = new DBHabitItem(taskTitle.getText().toString(),
+                        recurringDays);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user != null && newHabit != null) {
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("habits")
+                            .push()
+                            .setValue(newHabit);
+                }
+
+                if(taskTitle.getText().length()> 0) {
+                    Intent intent = new Intent(AddActivity.this, MainActivity.class);
+                    intent.putExtra("title", taskTitle.getText().toString());
+                    intent.putExtra("time1", time1);
+                    intent.putExtra("time2", time2);
+                    intent.putExtra("recur", recurringDays);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                }
+                else{
+                    Intent intent = new Intent(AddActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private void inflateAddTask() {
+
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
+        View addTaskView = inflater.inflate(R.layout.input_add_task, parent);
+        final Calendar cal = Calendar.getInstance();
+
+        //set up layout components of addTask page
+        final TextView startDate = (TextView) findViewById(R.id.text_StartDate);
+        final TextView endDate = (TextView) findViewById(R.id.text_EndDate);
+
+        final TextView startTime = (TextView) findViewById(R.id.text_StartTime);
+        final TextView endTime = (TextView) findViewById(R.id.text_EndTime);
+
+        Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
 
         //retrieve date info from intent by TasksActivity. default set to 1/1/2017
         time1 = Calendar.getInstance();
@@ -171,102 +264,6 @@ public class AddActivity extends AppCompatActivity {
             }
         };
 
-        //check'em all
-        check(checkedMon, checkedTue, checkedWed, checkedThu, checkedFri, checkedSat, checkedSun);
-
-        //Checked behaviors for each weekday.
-        //Checking a weekday turns its corresponding recurringDays[] entry to true
-        checkedMon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkedMon.isChecked()){
-                    checkedMon.setChecked(false);
-                    recurringDays[0] = false;
-                }else{
-                    checkedMon.setChecked(true);
-                    recurringDays[0] = true;
-                }
-            }
-        });
-
-        checkedTue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkedTue.isChecked()){
-                    checkedTue.setChecked(false);
-                    recurringDays[1] = false;
-                }else{
-                    checkedTue.setChecked(true);
-                    recurringDays[1] = true;
-                }
-            }
-        });
-
-        checkedWed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkedWed.isChecked()){
-                    checkedWed.setChecked(false);
-                    recurringDays[2] = false;
-                }else{
-                    checkedWed.setChecked(true);
-                    recurringDays[2] = true;
-                }
-            }
-        });
-
-        checkedThu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkedThu.isChecked()){
-                    checkedThu.setChecked(false);
-                    recurringDays[3] = false;
-                }else{
-                    checkedThu.setChecked(true);
-                    recurringDays[3] = true;
-                }
-            }
-        });
-
-        checkedFri.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkedFri.isChecked()){
-                    checkedFri.setChecked(false);
-                    recurringDays[4] = false;
-                }else{
-                    checkedFri.setChecked(true);
-                    recurringDays[4] = true;
-                }
-            }
-        });
-
-        checkedSat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkedSat.isChecked()){
-                    checkedSat.setChecked(false);
-                    recurringDays[5] = false;
-                }else{
-                    checkedSat.setChecked(true);
-                    recurringDays[5] = true;
-                }
-            }
-        });
-
-        checkedSun.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkedSun.isChecked()){
-                    checkedSun.setChecked(false);
-                    recurringDays[6] = false;
-                }else{
-                    checkedSun.setChecked(true);
-                    recurringDays[6] = true;
-                }
-            }
-        });
-
         //Click on create task button to bundle up task info
         //and send it back to MainActivity thru intent with RESULT_OK
         //format: Task Title, Start Time, End Time
@@ -324,10 +321,4 @@ public class AddActivity extends AppCompatActivity {
         time.set(Calendar.MONTH, month);
         time.set(Calendar.YEAR, year);
     };
-
-    public void check(CheckedTextView... blah){
-        for(CheckedTextView bla: blah){
-            bla.setChecked(true);
-        }
-    }
 }

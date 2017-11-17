@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/row_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/text_StartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_blue_bright"
+            android:backgroundTint="@android:color/holo_blue_bright"
+            android:padding="5sp"
+            android:text="Date"
+            android:textSize="24sp" />
+        
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/text_StartTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5sp"
+            android:text="Start Time"
+            android:textSize="24sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_EndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/row_start"
+        android:layout_alignLeft="@id/row_start"
+        android:background="@android:color/holo_green_light"
+        android:padding="5sp"
+        android:text="Date"
+        android:textSize="24sp"/>
+
+
+    <TextView
+        android:id="@+id/text_EndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/row_start"
+        android:layout_alignEnd="@id/row_start"
+        android:padding="5sp"
+        android:text="End Time"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/button_CreateTask"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:elevation="0dp"
+        android:text="Create Task" />
+
+</RelativeLayout>
