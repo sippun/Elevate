@@ -173,19 +173,8 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-<<<<<<< HEAD
                 //ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 database.insertItem(title, time1, time2, recurringDays);
-=======
-
-                ToDoFragment f = (ToDoFragment) getSupportFragmentManager().
-                        findFragmentById(R.id.fragment_container);
-
-                //pass ToDoItem parameters to insert function in ToDoFragment
-                f.insertItem(title, time1, time2, recurringDays);
-                createNotification(title, time1);
-
->>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();

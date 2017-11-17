@@ -271,24 +271,15 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-<<<<<<< HEAD
                 ToDoItem newTask = new ToDoItem(taskTitle.getText().toString(),
-=======
 
-                DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
->>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
                         time1.getTimeInMillis(),
                         time2.getTimeInMillis(),
                         recurringDays);
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-<<<<<<< HEAD
                 Log.d(TAG+"addTask", newTask.name);
-=======
 
-                Log.d("addTask", newTask.name);
->>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
 
 
                 if(user != null) {
@@ -298,17 +289,10 @@ public class AddActivity extends AppCompatActivity {
                             .child(user.getUid())
                             .child("tasks")
                             .push()
-<<<<<<< HEAD
                             .setValue(newTask.createDataBaseEntry());
                 }else{
                     Log.d(TAG+"addTask", "user =null");
-=======
-                            .setValue(newTask);
 
-                }else{
-                    Log.d("addTask", "user =null");
-
->>>>>>> fd9069a81b5e2b21f1f4a66c9efc2c47d33926c5
                 }
 
                 if(taskTitle.getText().length()> 0) {
