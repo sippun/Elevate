@@ -175,6 +175,8 @@ public class MainActivity extends AppCompatActivity
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
                 //ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 database.insertItem(title, time1, time2, recurringDays);
+				
+				createNotification(title, time1);
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
