@@ -41,7 +41,7 @@ public class CalendarFragment extends Fragment{
 
     private void setDayColors(View v) {
         MainActivity main = (MainActivity)getActivity();
-        for (String day_year : main.myDataMap.keySet()) {
+        for (String day_year : main.database.dayToItemsMap.keySet()) {
             setDayColor(day_year, v);
         }
     }
@@ -66,7 +66,7 @@ public class CalendarFragment extends Fragment{
 
     private int getColor(String day_year) {
         MainActivity main = (MainActivity)getActivity();
-        ArrayList<ToDoItem> todaysList = main.myDataMap.get(day_year);
+        ArrayList<ToDoItem> todaysList = main.database.dayToItemsMap.get(day_year);
         int totalTasks = todaysList.size();
         int completedTasks = 0;
         for (ToDoItem item : todaysList) {
