@@ -13,4 +13,6 @@
     <string name="greentored">GreenToRed</string>
     <string name="mood_prompt">How are you feeling right now?</string>
 
+    <string name="submitMood">Submit</string>
+
 </resources>
