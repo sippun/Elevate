@@ -11,5 +11,6 @@
 
     <string name="redtogreen">RedToGreen</string>
     <string name="greentored">GreenToRed</string>
+    <string name="mood_prompt">How are you feeling right now?</string>
 
 </resources>
