@@ -22,17 +22,19 @@ import java.util.List;
 
 public class DataBase {
     private final String TAG="DataBaseTag";
-    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private static final String userDataPath = "users/"+ user.getUid();
+    private FirebaseUser user;
+    private String userDataPath = "users/guest";
     public HashMap<String,ArrayList<ToDoItem>> dayToItemsMap = new HashMap<>();
-    private HashMap<String,RecyclerView.Adapter> dayToAdapterMap = new HashMap<>();
     public ArrayList<ToDoItem> activeItemsList = new ArrayList<ToDoItem>();
 
     public DataBase(){}
 
-    public void registerAdaptor(String day, RecyclerView.Adapter mAdaptor){
-        dayToAdapterMap.put(day, mAdaptor);
+
+    public void logIntoFirebase(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userDataPath = "users/"+ user.getUid();
     }
+
 
     public void addItemFromFirebaseToToDoFragment(final RecyclerView.Adapter mAdapter){
         FirebaseDatabase database = FirebaseDatabase.getInstance();

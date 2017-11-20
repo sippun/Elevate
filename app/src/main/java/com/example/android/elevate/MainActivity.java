@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
     private void userLogin(FirebaseAuth firebaseAuth){
         Log.d(TAG, "onAuthChanged");
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        database.logIntoFirebase();
         if (user != null) {
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
