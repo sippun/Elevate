@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,16 +17,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -146,8 +140,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new ToDoFragment()).commit();
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_mood) {
+            Intent a = new Intent(MainActivity.this, MoodInputUI.class);
+            startActivity(a);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
