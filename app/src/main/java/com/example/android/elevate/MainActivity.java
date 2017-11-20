@@ -174,8 +174,9 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                //ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 database.insertNewItem(title, time1, time2, recurringDays);
+				
+				        createNotification(title, time1);
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
@@ -201,11 +202,8 @@ public class MainActivity extends AppCompatActivity
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         assert alarmManager != null;
-        alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                startTime.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 }
