@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,14 +27,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
-
+    private static final String TAG = "AddActTag";
     DatePickerDialog.OnDateSetListener dListener1, dListener2;
     TimePickerDialog.OnTimeSetListener tListener1, tListener2;
     int currentDay, currentMonth, currentYear; //temp values to hold input
     String date1, date2;
     private Calendar time1, time2;   //actual start and end times to be passed back to main activity
     //private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-    private boolean[] recurringDays = {true, true, true, true, true, true, true};
     private EditText taskTitle;
 
     @Override
@@ -51,13 +51,12 @@ public class AddActivity extends AppCompatActivity {
         taskTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                removeInputType();
                 switch (checkedId) {
                     case R.id.radio_habit:
-                        removeInputType();
                         inflateAddHabit();
                         break;
                     case R.id.radio_task:
-                        removeInputType();
                         inflateAddTask();
                         break;
                 }
@@ -70,19 +69,14 @@ public class AddActivity extends AppCompatActivity {
         parent.removeAllViews();
     }
 
-    private void inflateAddHabit() {
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
-        View addHabitView = inflater.inflate(R.layout.input_add_habit, parent);
-
-        final CheckedTextView checkedMon = (CheckedTextView)findViewById(R.id.checkedMon);
-        final CheckedTextView checkedTue = (CheckedTextView)findViewById(R.id.checkedTue);
-        final CheckedTextView checkedWed = (CheckedTextView)findViewById(R.id.checkedWed);
-        final CheckedTextView checkedThu = (CheckedTextView)findViewById(R.id.checkedThu);
-        final CheckedTextView checkedFri = (CheckedTextView)findViewById(R.id.checkedFri);
-        final CheckedTextView checkedSat = (CheckedTextView)findViewById(R.id.checkedSat);
-        final CheckedTextView checkedSun = (CheckedTextView)findViewById(R.id.checkedSun);
+    private ArrayList<CheckedTextView> initWeekdayRecurringList(boolean fill) {
+        final CheckedTextView checkedMon = findViewById(R.id.checkedMon);
+        final CheckedTextView checkedTue = findViewById(R.id.checkedTue);
+        final CheckedTextView checkedWed = findViewById(R.id.checkedWed);
+        final CheckedTextView checkedThu = findViewById(R.id.checkedThu);
+        final CheckedTextView checkedFri = findViewById(R.id.checkedFri);
+        final CheckedTextView checkedSat = findViewById(R.id.checkedSat);
+        final CheckedTextView checkedSun = findViewById(R.id.checkedSun);
 
         final ArrayList<CheckedTextView> checkDays = new ArrayList<CheckedTextView>() {
             {
@@ -93,20 +87,31 @@ public class AddActivity extends AppCompatActivity {
 
         for(int i = 0; i < checkDays.size(); i++) {
             final CheckedTextView dayCheckView = checkDays.get(i);
-            dayCheckView.setChecked(true);
+            dayCheckView.setChecked(fill);
             dayCheckView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dayCheckView.toggle();
                 }
             });
-            recurringDays[i] = !recurringDays[i];
         }
 
-        Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
-        button_AddTask.setOnClickListener(new View.OnClickListener(){
+        return checkDays;
+    }
+
+    private void inflateAddHabit() {
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
+        View addHabitView = inflater.inflate(R.layout.input_add_habit, parent);
+
+        final ArrayList<CheckedTextView> checkDays = initWeekdayRecurringList(true);
+
+        Button button_AddHabit = findViewById(R.id.button_CreateTask);
+        button_AddHabit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                boolean[] recurringDays = getRecurringDays(checkDays);
                 DBHabitItem newHabit = new DBHabitItem(taskTitle.getText().toString(),
                         recurringDays);
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -118,6 +123,9 @@ public class AddActivity extends AppCompatActivity {
                             .push()
                             .setValue(newHabit);
                 }
+
+                time1.set(Calendar.SECOND, 0);
+                time2.set(Calendar.SECOND, 0); // temp
 
                 if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
@@ -134,6 +142,14 @@ public class AddActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean[] getRecurringDays(ArrayList<CheckedTextView> days) {
+        boolean[] recurringDaysArray = new boolean[days.size()];
+        for(int i = 0; i < recurringDaysArray.length; i++) {
+            recurringDaysArray[i] = days.get(i).isChecked();
+        }
+        return recurringDaysArray;
     }
 
     private void inflateAddTask() {
@@ -156,6 +172,8 @@ public class AddActivity extends AppCompatActivity {
         //retrieve date info from intent by TasksActivity. default set to 1/1/2017
         time1 = Calendar.getInstance();
         time2 = Calendar.getInstance();
+        time1.set(Calendar.SECOND, 0);
+        time2.set(Calendar.SECOND, 0);
         currentDay = getIntent().getIntExtra("day", cal.get(Calendar.DAY_OF_MONTH));
         currentMonth = getIntent().getIntExtra("month", cal.get(Calendar.MONTH)+1);
         currentYear = getIntent().getIntExtra("year",cal.get(Calendar.YEAR));
@@ -260,23 +278,37 @@ public class AddActivity extends AppCompatActivity {
             }
         };
 
+        final ArrayList<CheckedTextView> checkDays = initWeekdayRecurringList(false);
+
         //Click on create task button to bundle up task info
         //and send it back to MainActivity thru intent with RESULT_OK
         //format: Task Title, Start Time, End Time
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                DBTaskItem newTask = new DBTaskItem(taskTitle.getText().toString(),
+                boolean[] recurringDays = getRecurringDays(checkDays);
+                ToDoItem newTask = new ToDoItem(taskTitle.getText().toString(),
+
                         time1.getTimeInMillis(),
-                        time2.getTimeInMillis());
+                        time2.getTimeInMillis(),
+                        recurringDays);
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Log.d(TAG+"addTask", newTask.name);
+
+
+
                 if(user != null) {
+                    Log.d(TAG+"addTask", newTask.toString());
                     FirebaseDatabase.getInstance().getReference()
                             .child("users")
                             .child(user.getUid())
                             .child("tasks")
                             .push()
-                            .setValue(newTask);
+                            .setValue(newTask.createDataBaseEntry());
+                }else{
+                    Log.d(TAG+"addTask", "user =null");
+
                 }
 
                 if(taskTitle.getText().length()> 0) {

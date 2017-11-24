@@ -1,8 +1,12 @@
 package com.example.android.elevate;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -15,8 +19,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -26,7 +32,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivityTag";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -35,31 +41,25 @@ public class MainActivity extends AppCompatActivity
     private static final int RC_SIGN_IN = 123;
 
     //Hashmap stores <DAY, TODOITEM> pairs
-    public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
+    //public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
+    public DataBase database = new DataBase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mAuth = FirebaseAuth.getInstance();
+
+
+        userLogin(mAuth);
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
 
 
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    startActivityForResult(
-                            // Get an instance of AuthUI based on the default app
-                            AuthUI.getInstance().createSignInIntentBuilder().build(),
-                            RC_SIGN_IN);
-                }
+                userLogin(firebaseAuth);
+
             }
         };
 
@@ -86,6 +86,22 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction().
                 add(R.id.fragment_container, new ToDoFragment()).commit();
+    }
+
+    private void userLogin(FirebaseAuth firebaseAuth){
+        Log.d(TAG, "onAuthChanged");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+        } else {
+            // User is signed out
+            Log.d(TAG, "onAuthStateChanged:signed_out");
+            startActivityForResult(
+                    // Get an instance of AuthUI based on the default app
+                    AuthUI.getInstance().createSignInIntentBuilder().build(),
+                    RC_SIGN_IN);
+        }
     }
 
     @Override
@@ -159,13 +175,37 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                f.insertItem(title, time1, time2, recurringDays);
+                //ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                database.insertItem(title, time1, time2, recurringDays);
+				
+				createNotification(title, time1);
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
             }
         }
+    }
+
+    public void createNotification(String title, Calendar startTime){
+
+        // Setting intent to class where Alarm broadcast message will be handled
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.setAction("com.example.android.elevate.MY_NOTIFICATION");
+        intent.putExtra("title", title);
+
+        // Pending Intent for if user clicks on notification
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,0, intent, 0);
+
+        Toast.makeText(this, "notification created at "+startTime.getTime(),
+                Toast.LENGTH_LONG).show();
+
+        // Get instance of AlarmManager service
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        assert alarmManager != null;
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 }
