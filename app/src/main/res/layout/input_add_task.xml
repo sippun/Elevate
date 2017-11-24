@@ -44,7 +44,6 @@
         android:text="Date"
         android:textSize="24sp"/>
 
-
     <TextView
         android:id="@+id/text_EndTime"
         android:layout_width="wrap_content"
@@ -55,15 +54,15 @@
         android:text="End Time"
         android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/button_CreateTask"
-        style="@style/Widget.AppCompat.Button.Colored"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:backgroundTint="@android:color/holo_blue_light"
-        android:elevation="0dp"
-        android:text="Create Task" />
+        android:layout_below="@id/text_EndDate"
+        android:layout_centerHorizontal="true">
+        <include
+            layout="@layout/input_add_recurring_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 </RelativeLayout>
