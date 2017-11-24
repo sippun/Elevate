@@ -58,9 +58,7 @@ public class DataBase {
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG+"TaskList", "Something went wrong with getting the existing tasks");
             }
-
         });
-
     }
 
 

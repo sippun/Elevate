@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //make mood prompts show at two customizable times of the day
+        createMoodPrompt(12,0);
+        createMoodPrompt(18,0);
         mAuth = FirebaseAuth.getInstance();
 
 
@@ -198,6 +202,30 @@ public class MainActivity extends AppCompatActivity
 
         assert alarmManager != null;
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    public void createMoodPrompt(int hour, int second){
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.SECOND, second);
+        // Setting intent to class where Alarm broadcast message will be handled
+        Intent intent = new Intent(this, MoodNotificationReceiver.class);
+        intent.setAction("com.example.android.elevate.MY_NOTIFICATION");
+
+        // Pending Intent for if user clicks on notification
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,0, intent, 0);
+
+        Toast.makeText(this, "Mood prompt will show at "+hour+":"+second,
+                Toast.LENGTH_LONG).show();
+
+        // Get instance of AlarmManager service
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        assert alarmManager != null;
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
