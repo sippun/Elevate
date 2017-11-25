@@ -40,26 +40,37 @@
     </RadioGroup>
 
     <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text_StartDate"
+        android:layout_alignStart="@+id/radio_TaskType"
+        android:layout_marginBottom="20dp"
+        android:text="@string/repeat_optional"
+        android:textSize="18sp" />
+
+    <TextView
         android:id="@+id/text_StartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/radio_TaskType"
-        android:layout_alignLeft="@id/radio_TaskType"
-        android:layout_marginTop="45dp"
-        android:layout_marginBottom="45dp"
+        android:layout_above="@+id/text_EndTime"
+        android:layout_alignStart="@+id/textView5"
+        android:layout_marginBottom="18dp"
         android:padding="5sp"
         android:text="Start Time"
-        android:textSize="24sp"/>
+        android:textColor="@color/black"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/text_EndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_StartTime"
-        android:layout_alignLeft="@id/text_StartTime"
-        android:layout_marginBottom="70dp"
+        android:layout_above="@+id/checkedFri"
+        android:layout_alignStart="@+id/checkedMon"
+        android:layout_marginBottom="52dp"
         android:padding="5sp"
         android:text="End Time"
+        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <TextView
@@ -68,9 +79,8 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/text_TaskTitle"
         android:layout_alignTop="@id/text_StartTime"
-        android:background="@android:color/holo_blue_bright"
-        android:backgroundTint="@android:color/holo_blue_bright"
         android:padding="5sp"
+        android:textColor="@color/colorAccent"
         android:text="Date"
         android:textSize="24sp"/>
 
@@ -80,8 +90,8 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/text_TaskTitle"
         android:layout_alignTop="@id/text_EndTime"
-        android:background="@android:color/holo_green_light"
         android:padding="5sp"
+        android:textColor="@color/colorAccent"
         android:text="Date"
         android:textSize="24sp"/>
 
@@ -94,7 +104,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="63dp"
         android:layout_marginEnd="47dp"
-        android:backgroundTint="@android:color/holo_blue_light"
+        android:backgroundTint="@color/colorAccent"
         android:elevation="0dp"
         android:text="Create Task" />
 
@@ -102,8 +112,8 @@
         android:id="@+id/checkedMon"
         style="@style/checktextview"
         android:layout_alignBottom="@+id/checkedFri"
-        android:layout_marginBottom="26dp"
         android:layout_alignStart="@+id/text_StartTime"
+        android:layout_marginBottom="48dp"
         android:text="Mon" />
 
     <CheckedTextView
@@ -111,6 +121,7 @@
         style="@style/checktextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/checkedMon"
         android:layout_alignBottom="@+id/checkedMon"
         android:layout_toEndOf="@+id/checkedMon"
         android:text="Tue" />
@@ -142,6 +153,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/button_CreateTask"
         android:layout_alignStart="@+id/checkedMon"
+        android:layout_marginBottom="48dp"
         android:text="Fri" />
 
     <CheckedTextView
@@ -163,5 +175,7 @@
         android:layout_alignBottom="@+id/checkedSat"
         android:layout_toEndOf="@+id/checkedSat"
         android:text="Sun" />
+
+
 
 </RelativeLayout>

@@ -18,11 +18,8 @@ import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
@@ -325,9 +322,9 @@ public class AddActivity extends AppCompatActivity {
         time.set(Calendar.YEAR, year);
     };
 
-    public void check(CheckedTextView... blah){
+    public void check(CheckedTextView... blah){  // Set default checked
         for(CheckedTextView bla: blah){
-            bla.setChecked(true);
+            bla.setChecked(false);  // changed from true
         }
     }
 }

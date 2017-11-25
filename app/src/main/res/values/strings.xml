@@ -14,5 +14,5 @@
     <string name="mood_prompt">How are you feeling right now?</string>
 
     <string name="submitMood">Submit</string>
-
+    <string name="repeat_optional">Repeat (optional)</string>
 </resources>
