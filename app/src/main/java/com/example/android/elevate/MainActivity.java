@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity
         userLogin(mAuth);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
+
+
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 userLogin(firebaseAuth);
