@@ -30,11 +30,14 @@ public class DataBase {
     public DataBase(){}
 
 
-    public void logIntoFirebase(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userDataPath = "users/"+ user.getUid();
+    public void logIntoFirebase() {
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        if (user != null) {
+//            userDataPath = "users/" + user.getUid();
+//
+//        }
     }
-
 
     public void addItemFromFirebaseToToDoFragment(final RecyclerView.Adapter mAdapter){
         FirebaseDatabase database = FirebaseDatabase.getInstance();

@@ -28,8 +28,6 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     private List<ToDoItem> items;
     private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
-    private static final String userDataPath = "user/"+ FirebaseAuth.getInstance().getCurrentUser().getUid();
-
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder

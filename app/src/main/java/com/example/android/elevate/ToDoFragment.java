@@ -68,7 +68,7 @@ public class ToDoFragment extends Fragment {
 
         mAdapter = new ToDoAdapter(dataBase.dayToItemsMap.get(day_year));
 
-        dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
+        //dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
 
         mRecyclerView.setAdapter(mAdapter);
 
