@@ -52,7 +52,10 @@ public class ToDoItem {
     public String getName(){
         return name;
     }
+
+    public void setId(String id) {this.id = id;}
     public String getId(){return id;}
+
     public Calendar getStartTime(){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(startTime);

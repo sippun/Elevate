@@ -286,6 +286,7 @@ public class AddActivity extends AppCompatActivity {
         button_AddTask.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+              
                 boolean[] recurringDays = getRecurringDays(checkDays);
                 ToDoItem newTask = new ToDoItem(taskTitle.getText().toString(),
 
