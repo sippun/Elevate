@@ -26,6 +26,12 @@
             android:parentActivityName=".MainActivity">
         </activity>
         <receiver android:name=".NotificationReceiver" />
+        <receiver android:name=".MoodNotificationReceiver" />
+        <activity
+            android:name=".MoodInputUI"
+            android:label="Record Mood"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>
