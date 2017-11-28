@@ -26,7 +26,7 @@ import java.util.List;
 
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     private List<ToDoItem> items;
-    private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    //private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     private static final String userDataPath = "user/"+ FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -71,9 +71,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         final String itemID = item.getId();
 
         TextView textView = holder.nameTextView;
-        textView.setText(item.getName() + "  "+
-                sdf.format(item.getStartTime().getTime()) + "  "+
-                sdf.format(item.getEndTime().getTime()));
+        textView.setText(item.getName());
 
         Log.d("addTask", itemID);
 
