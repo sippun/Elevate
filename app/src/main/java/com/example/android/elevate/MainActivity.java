@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
-    //Hashmap stores <DAY, TODOITEM> pairs
-    //public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
+    //handles all firebase related things
     public DataBase database = new DataBase();
 
     @Override
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity
     private void userLogin(FirebaseAuth firebaseAuth){
         Log.d(TAG, "onAuthChanged");
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        database.logIntoFirebase();
         if (user != null) {
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -174,10 +174,9 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                //ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                database.insertItem(title, time1, time2, recurringDays);
+                database.addNewItem(title, time1, time2, recurringDays);
 				
-				createNotification(title, time1);
+				        createNotification(title, time1);
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
