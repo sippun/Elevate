@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
-    //Hashmap stores <DAY, TODOITEM> pairs
-    //public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
+    //handles all firebase related things
     public DataBase database = new DataBase();
 
     @Override
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                database.insertNewItem(title, time1, time2, recurringDays);
+                database.addNewItem(title, time1, time2, recurringDays);
 				
 				        createNotification(title, time1);
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();

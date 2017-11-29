@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,6 @@ public class ToDoFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    public ArrayList<ToDoItem> myDataset;
 
     String day_year;
     Calendar cal;
@@ -51,17 +50,21 @@ public class ToDoFragment extends Fragment {
         main = (MainActivity)getActivity();
         DataBase dataBase = main.database;
 
-        if(dataBase.dayToItemsMap.get(day_year) == null) {
-            dataBase.dayToItemsMap.put(day_year, main.database.activeItemsList);
-        }
+//        if(dataBase.dayToItemsMap.get(day_year) == null) {
+//            dataBase.dayToItemsMap.put(day_year, main.database.activeItemsList);
+//        }
 
-        mAdapter = new ToDoAdapter(dataBase.dayToItemsMap.get(day_year));
-
-        dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
-
+        Log.d(TAG, dataBase.todaysItemsList.toString());
+        mAdapter = new ToDoAdapter(dataBase.todaysItemsList);
         mRecyclerView.setAdapter(mAdapter);
+        dataBase.refreshTodaysList(day_year, mAdapter);
+        //dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
+
 
         mAdapter.notifyDataSetChanged();
+
+
+        //
 
         return rootView;
     }

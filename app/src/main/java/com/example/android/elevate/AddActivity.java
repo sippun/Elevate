@@ -294,23 +294,24 @@ public class AddActivity extends AppCompatActivity {
                         time2.getTimeInMillis(),
                         recurringDays);
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Log.d(TAG+"addTask", newTask.name);
-
-
-
-                if(user != null) {
-                    Log.d(TAG+"addTask", newTask.toString());
-                    FirebaseDatabase.getInstance().getReference()
-                            .child("users")
-                            .child(user.getUid())
-                            .child("tasks")
-                            .push()
-                            .setValue(newTask.createDataBaseEntry());
-                }else{
-                    Log.d(TAG+"addTask", "user =null");
-
-                }
+                //This should be done in the DataBase!! (From the MainActivity?)
+//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                Log.d(TAG+"addTask", newTask.name);
+//
+//
+//
+//                if(user != null) {
+//                    Log.d(TAG+"addTask", newTask.toString());
+//                    FirebaseDatabase.getInstance().getReference()
+//                            .child("users")
+//                            .child(user.getUid())
+//                            .child("tasks")
+//                            .push()
+//                            .setValue(newTask.createDataBaseEntry());
+//                }else{
+//                    Log.d(TAG+"addTask", "user =null");
+//
+//                }
 
                 if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);

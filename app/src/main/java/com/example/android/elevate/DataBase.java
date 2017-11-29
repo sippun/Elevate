@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -22,10 +23,11 @@ import java.util.List;
 
 public class DataBase {
     private final String TAG="DataBaseTag";
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser user;
     private String userDataPath = "users/guest";
     public HashMap<String,ArrayList<ToDoItem>> dayToItemsMap = new HashMap<>();
-    public ArrayList<ToDoItem> activeItemsList = new ArrayList<ToDoItem>();
+    public ArrayList<ToDoItem> todaysItemsList = new ArrayList<ToDoItem>();
 
     public DataBase(){}
 
@@ -39,27 +41,77 @@ public class DataBase {
         }
     }
 
-    public void addItemFromFirebaseToToDoFragment(final RecyclerView.Adapter mAdapter){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference tasks = database.getReference(userDataPath+"/tasks");
+    //add to-do item to list of tasks on firebase
+    public void addNewItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays){
+        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays);
+
+        if(user != null) {
+            Log.d(TAG+"addTask", item.toString());
+            DatabaseReference ref= database.getReference(userDataPath+"/tasks");
+            String key = ref.push().getKey();
+            item.setId(key);
+            ref.child("/"+key).setValue( item.createDataBaseEntry() );
+
+        }else{
+            Log.d(TAG+"addTask", "user =null");
+        }
+
+    }
+
+    //setup todaysItemsList for use
+    public void refreshTodaysList(final String today, final RecyclerView.Adapter mAdapter){
+        firebaseListToCalendar("/tasks", "/calendar/"+today, today, mAdapter);
+        //including this seems to dupicate all tasks, despite there not being any habits yet. Not sure why.
+        //firebaseListToCalendar("/habits", "/calendar/"+today, today, mAdapter);
+    }
+
+    private void firebaseListToCalendar(String from, String to, final String today, final RecyclerView.Adapter mAdapter){
+        final DatabaseReference dataDay = database.getReference(userDataPath+to);
+        DatabaseReference itemList = database.getReference(userDataPath+from);
+
+        itemList.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot task : dataSnapshot.getChildren()) {
+                    DBTaskItem item = task.getValue(DBTaskItem.class);
+                    if(item != null && beforeOrOnDate(today, longCalAsString(item.endTime))) {
+                        dataDay.child("/" + task.getKey()).setValue(item);
+                    }
+                }
+                updateLocal(today, mAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG+"TaskList", "Something went wrong with populating a day");
+            }
+        });
+    }
+    private void updateLocal(final String today, final RecyclerView.Adapter mAdapter){
+        final DatabaseReference tasks = database.getReference(userDataPath+"/calendar/"+today);
+        Log.d(TAG, today);
+        todaysItemsList.clear();
 
         tasks.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for(DataSnapshot task : dataSnapshot.getChildren()) {
                     ToDoItem item = new ToDoItem(task.getValue(DBTaskItem.class));
                     item.setId(task.getKey());
 
                     if(item != null) {
-                        Log.d(TAG+"TaskList", item.name);
-                        insertItem(item);
+                        Log.d(TAG+"refresh", item.name);
+
+                        todaysItemsList.add(item);
+                        mAdapter.notifyDataSetChanged();
                     }else{
-                        Log.d(TAG+"TaskList", "item = null");
+                        Log.d(TAG+"refresh", "item = null");
                     }
                 }
 
                 mAdapter.notifyDataSetChanged();
-                Log.d(TAG+"Final", dayToItemsMap.toString());
+                Log.d(TAG+"Refresh", todaysItemsList.toString());
             }
 
             @Override
@@ -70,51 +122,40 @@ public class DataBase {
     }
 
 
-    //insert to-do item into lists from startTime to endTime
-    public void insertNewItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays){
-        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays);
 
-        if(user != null) {
-            Log.d(TAG+"addTask", item.toString());
-            DatabaseReference ref= FirebaseDatabase.getInstance().getReference()
-                    .child("users")
-                    .child(user.getUid())
-                    .child("tasks");
-            String key = ref.push().getKey();
-            item.setId(key);
-            ref.child("/"+key).setValue( item.createDataBaseEntry());
 
-            insertItem(item);
-        }else{
-            Log.d(TAG+"addTask", "user =null");
-        }
 
+    private int getYear(String today){
+        String[] part = today.split(":");
+        return Integer.parseInt(part[1]);
+    }
+    private int getDay(String today){
+        String[] part = today.split(":");
+        return Integer.parseInt(part[0]);
     }
 
-    public void insertItem(ToDoItem item){
-        //pointer starts at startTime and increments towards endTime
-        Calendar pointer = (Calendar)item.getStartTime().clone();
-        while(pointer.compareTo(item.getEndTime()) <= 0) { //before or at this date
-            //check if pointer's weekday is to be recurred
-            if (checkWeekDayRecur(pointer, item.getRecurringDays())) {
-                //hashmap key = "day:year"
-                //if hashmap doesn't contain key, insert item into a new list
-                //otherwise insert item into existing list, then increment pointer by 1 day
-                String key = pointer.get(Calendar.DAY_OF_YEAR) + ":" + pointer.get(Calendar.YEAR);
+    private String longCalAsString(long date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date);
+        return cal.get(Calendar.DAY_OF_YEAR) + ":" +cal.get(Calendar.YEAR);
+    }
 
-                ArrayList<ToDoItem> toDoList = dayToItemsMap.get(key);
-                if (toDoList != null) {
-                    if (!itemInList(toDoList, item.id)) {
-                        toDoList.add(item);
-                    }
-                } else {
-                    toDoList = new ArrayList<>();
-                    toDoList.add(item);
-                    dayToItemsMap.put(key, toDoList);
-                }
-                Log.d(TAG+" afterInsert", dayToItemsMap.toString());
+    private boolean beforeOrOnDate(String today, String reference){
+        int todayDay = getDay(today);
+        int todayYear = getYear(today);
+        int refDay = getDay(reference);
+        int refYear = getYear(reference);
+
+        if(todayYear < refYear){
+            return true;
+        }else if( todayYear == refYear){
+            if(todayDay <= refDay){
+                return true;
+            }else{
+                return false;
             }
-            pointer.add(Calendar.DATE, 1);
+        }else{
+            return false;
         }
     }
 
