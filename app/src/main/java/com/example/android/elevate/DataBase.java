@@ -31,12 +31,12 @@ public class DataBase {
 
 
     public void logIntoFirebase() {
-//        user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        if (user != null) {
-//            userDataPath = "users/" + user.getUid();
-//
-//        }
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            userDataPath = "users/" + user.getUid();
+
+        }
     }
 
     public void addItemFromFirebaseToToDoFragment(final RecyclerView.Adapter mAdapter){
