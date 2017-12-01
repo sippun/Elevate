@@ -38,14 +38,18 @@
             android:text="Habit"/>
     </RadioGroup>
 
+
     <Button
         android:id="@+id/button_CreateTask"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/text_TaskTitle"
-        android:layout_alignTop="@id/text_TaskTitle"
-        android:backgroundTint="@android:color/holo_blue_light"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="63dp"
+        android:layout_marginEnd="47dp"
+        android:backgroundTint="@color/colorAccent"
+
         android:elevation="0dp"
         android:text=">>" />
 
@@ -55,6 +59,8 @@
         android:id="@+id/add_input_layout"
         android:layout_below="@id/radio_TaskType">
     </FrameLayout>
+
+
 
 
 </RelativeLayout>

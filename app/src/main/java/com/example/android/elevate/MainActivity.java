@@ -142,10 +142,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_calendar) {
             getSupportFragmentManager().beginTransaction().
-                    replace(R.id.fragment_container, new CalendarFragment()).commit();
+                    replace(R.id.fragment_container, new CalendarFragment()).
+                    addToBackStack(null).commit();
         } else if (id == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().
-                    replace(R.id.fragment_container, new ToDoFragment()).commit();
+                    replace(R.id.fragment_container, new ToDoFragment()).
+                    addToBackStack(null).commit();
         } else if (id == R.id.nav_mood) {
             Intent a = new Intent(MainActivity.this, MoodInputUI.class);
             startActivity(a);

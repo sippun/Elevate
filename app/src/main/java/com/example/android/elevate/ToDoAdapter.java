@@ -25,6 +25,7 @@ import java.util.List;
  */
 
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
+    private DataBase dataBase;
     private List<ToDoItem> items;
     //private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
@@ -43,8 +44,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ToDoAdapter(List<ToDoItem> items) {
-        this.items = items;
+    public ToDoAdapter(DataBase dataBase) {
+        this.dataBase = dataBase;
+        this.items = dataBase.todaysItemsList;
     }
 
     // Create new views (invoked by the layout manager)
@@ -73,29 +75,19 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
 
         Log.d("addTask", itemID);
 
-        //final ToggleButton toggleButton = holder.nameToggleButton;
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final ToggleButton toggleButton = holder.nameToggleButton;
 
-//        final DatabaseReference doneness = database.getReference(userDataPath+"/tasks/"+itemID+"/done");
-//         //Pull initial state from the database:
-//         doneness.addListenerForSingleValueEvent(new ValueEventListener() {
-//             @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                 toggleButton.setChecked((boolean) dataSnapshot.getValue());
-//            }
-//             @Override
-//             public void onCancelled(DatabaseError databaseError) {
-//                     Log.d("Toggle", "Something went wrong with getting doneness of "+itemID);
-//             }
-//         });
-//
-//         //Set up toggle to alter the database:
-//         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                 doneness.setValue(isChecked);
-//                 Log.d("Toggle", itemID);
-//             }
-//         });
+        //dataBase.updateDoneness(toggleButton, day, itemID);
+
+        toggleButton.setChecked(item.done);
+
+         //Set up toggle to alter the database:
+         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                 dataBase.updateDoneness(itemID, isChecked);
+                 Log.d("Toggle", itemID);
+             }
+         });
 
     }
 
