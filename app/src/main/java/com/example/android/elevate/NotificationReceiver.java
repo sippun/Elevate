@@ -20,20 +20,20 @@ import android.support.v4.app.NotificationCompat;
  */
 
 public class NotificationReceiver extends BroadcastReceiver {
+    public static NotificationManager notificationManager;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
         // Notification built here
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        int NOTIFICATION_ID = 101;
         int importance = NotificationManager.IMPORTANCE_HIGH;
         String CHANNEL_ID = "habit_channel";
         CharSequence name = "habit reminder";
         String description = "habit reminder channel description";
         String taskTitle = intent.getStringExtra("title");
-        System.out.print(taskTitle);
+        int NOTIFICATION_ID = intent.getIntExtra("id", 0);
 
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
@@ -48,7 +48,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                         .setContentTitle("Elevate")
-                        .setContentText("Have you started"+" "+taskTitle+"?");
+                        .setContentText("Have you started"+" "+taskTitle+" "+NOTIFICATION_ID+"?");
 
         Intent resultIntent = new Intent(context, MainActivity.class);
 

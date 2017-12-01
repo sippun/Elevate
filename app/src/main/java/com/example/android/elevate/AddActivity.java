@@ -288,12 +288,6 @@ public class AddActivity extends AppCompatActivity {
             public void onClick(View v){
               
                 boolean[] recurringDays = getRecurringDays(checkDays);
-                ToDoItem newTask = new ToDoItem(taskTitle.getText().toString(),
-
-                        time1.getTimeInMillis(),
-                        time2.getTimeInMillis(),
-                        recurringDays);
-
                 if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
                     intent.putExtra("title", taskTitle.getText().toString());
