@@ -50,21 +50,14 @@ public class ToDoFragment extends Fragment {
         main = (MainActivity)getActivity();
         DataBase dataBase = main.database;
 
-//        if(dataBase.dayToItemsMap.get(day_year) == null) {
-//            dataBase.dayToItemsMap.put(day_year, main.database.activeItemsList);
-//        }
-
         Log.d(TAG, dataBase.todaysItemsList.toString());
-        mAdapter = new ToDoAdapter(dataBase.todaysItemsList);
+        mAdapter = new ToDoAdapter(dataBase);
         mRecyclerView.setAdapter(mAdapter);
         dataBase.refreshTodaysList(day_year, mAdapter);
-        //dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
-
 
         mAdapter.notifyDataSetChanged();
 
-
-        //
+        Log.d(TAG, dataBase.mapOfArraysToString(dataBase.donenessHistory) );
 
         return rootView;
     }
