@@ -2,6 +2,7 @@ package com.example.android.elevate;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +29,7 @@ public class DataBase {
     private String userDataPath = "users/guest";
     public HashMap<String,ArrayList<ToDoItem>> dayToItemsMap = new HashMap<>();
     public ArrayList<ToDoItem> todaysItemsList = new ArrayList<ToDoItem>();
+    private String openDay = "000:0000";
 
     public DataBase(){}
 
@@ -51,30 +53,66 @@ public class DataBase {
             String key = ref.push().getKey();
             item.setId(key);
             ref.child("/"+key).setValue( item.createDataBaseEntry() );
-
-        }else{
-            Log.d(TAG+"addTask", "user =null");
         }
 
     }
 
     //setup todaysItemsList for use
     public void refreshTodaysList(final String today, final RecyclerView.Adapter mAdapter){
-        firebaseListToCalendar("/tasks", "/calendar/"+today, today, mAdapter);
-        //including this seems to dupicate all tasks, despite there not being any habits yet. Not sure why.
-        //firebaseListToCalendar("/habits", "/calendar/"+today, today, mAdapter);
+        openDay = today;
+        todaysItemsList.clear();
+        mAdapter.notifyDataSetChanged();
+        getExistingList(today, mAdapter);
+
     }
 
-    private void firebaseListToCalendar(String from, String to, final String today, final RecyclerView.Adapter mAdapter){
+    private void getExistingList(final String today, final RecyclerView.Adapter mAdapter){
+        DatabaseReference firebaseCalendar = database.getReference(userDataPath+"/calendar/" +today);
+
+        firebaseCalendar.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayList<ToDoItem> fireBaseList = new ArrayList<ToDoItem>();
+
+                for(DataSnapshot task : dataSnapshot.getChildren()) {
+                    DBTaskItem item = task.getValue(DBTaskItem.class);
+                    if(item != null ) {
+                        ToDoItem tditem = new ToDoItem(item);
+                        tditem.setId(task.getKey());
+                        fireBaseList.add(tditem);
+                    }
+                }
+                firebaseListToCalendar("/tasks", "/calendar/"+today, today, fireBaseList,mAdapter);
+                //including this seems to duplicate all tasks, despite there not being any habits yet.
+                // Probably because it is adding from the same list two separate times simultaneously?.
+                // firebaseListToCalendar("/habits", "/calendar/"+today, today, fireBaseList, mAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG+"TaskList", "Something went wrong with populating a day");
+            }
+        });
+    }
+
+    private void firebaseListToCalendar(String from, String to, final String today,
+                                        final ArrayList<ToDoItem> fireBaseList,
+                                        final RecyclerView.Adapter mAdapter){
         final DatabaseReference dataDay = database.getReference(userDataPath+to);
-        DatabaseReference itemList = database.getReference(userDataPath+from);
+        final DatabaseReference itemList = database.getReference(userDataPath+from);
 
         itemList.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot task : dataSnapshot.getChildren()) {
                     DBTaskItem item = task.getValue(DBTaskItem.class);
-                    if(item != null && beforeOrOnDate(today, longCalAsString(item.endTime))) {
+                    if(item != null &&
+                            beforeOrOnDate(longCalAsString(item.startTime), today) &&
+                            beforeOrOnDate(today, longCalAsString(item.endTime)) &&
+                            !itemInList(fireBaseList, task.getKey())) {
+
+                        Log.d(TAG, task.getKey() + " " + fireBaseList.toString());
                         dataDay.child("/" + task.getKey()).setValue(item);
                     }
                 }
@@ -90,26 +128,18 @@ public class DataBase {
     private void updateLocal(final String today, final RecyclerView.Adapter mAdapter){
         final DatabaseReference tasks = database.getReference(userDataPath+"/calendar/"+today);
         Log.d(TAG, today);
-        todaysItemsList.clear();
+
 
         tasks.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 for(DataSnapshot task : dataSnapshot.getChildren()) {
-                    ToDoItem item = new ToDoItem(task.getValue(DBTaskItem.class));
-                    item.setId(task.getKey());
-
-                    if(item != null) {
-                        Log.d(TAG+"refresh", item.name);
-
+                    if(task.getValue(DBTaskItem.class) != null) {
+                        ToDoItem item = new ToDoItem(task.getValue(DBTaskItem.class));
+                        item.setId(task.getKey());
                         todaysItemsList.add(item);
-                        mAdapter.notifyDataSetChanged();
-                    }else{
-                        Log.d(TAG+"refresh", "item = null");
                     }
                 }
-
                 mAdapter.notifyDataSetChanged();
                 Log.d(TAG+"Refresh", todaysItemsList.toString());
             }
@@ -121,9 +151,18 @@ public class DataBase {
         });
     }
 
-
-
-
+    public void updateDoneness( String itemID, boolean done){
+        //update Firebase:
+        String path = userDataPath+"/calendar/"+ openDay+"/"+itemID+"/done";
+        database.getReference(path).setValue(done);
+        //update Local: (not strictly necessary, but there is a noticeable lag in display of recently changed values otherwise)
+        for (ToDoItem item: todaysItemsList) {
+            if(item.id.equals(itemID)) {
+                item.done = done;
+            }
+        }
+    }
+    
 
     private int getYear(String today){
         String[] part = today.split(":");
@@ -174,15 +213,11 @@ public class DataBase {
     }
 
     boolean itemInList(List<ToDoItem> toDoList, String id){
-        Log.d("LoopStart", toDoList.toString());
         for (ToDoItem item: toDoList) {
-            Log.d("LoopItter", item.getId() +" vs "+ id);
-            if(item.getId() == id) {
-                Log.d("LoopEnd", "true");
+            if(item.getId().equals(id)) {
                 return true;
             }
         }
-        Log.d("LoopEnd", "false");
         return false;
     }
 }
