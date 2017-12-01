@@ -30,33 +30,34 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private static boolean moodPromptSet = false;
 
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
     //handles all firebase related things
-    public DataBase database = new DataBase();
+    public static DataBase database = new DataBase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //make mood prompts show at two customizable times of the day
-        createMoodPrompt(12,0);
-        createMoodPrompt(18,0);
+        if(!moodPromptSet) {
+            //make mood prompts show at two customizable times of the day
+            createMoodPrompt(12, 0);
+            createMoodPrompt(18, 0);
+            moodPromptSet = true;
+        }
+
         mAuth = FirebaseAuth.getInstance();
-
-
         userLogin(mAuth);
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
 
 
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 userLogin(firebaseAuth);
-
             }
         };
 

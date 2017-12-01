@@ -33,13 +33,11 @@ public class MoodInputUI extends AppCompatActivity {
                 else {                   // Plural
                     starCheck = "stars";
                 }
-
-
+                MainActivity.database.recordMood(rating);
                 // Toast Message
                 String ratingString = rating + " " + starCheck + " recorded";
                 Toast.makeText(getApplicationContext(), ratingString, Toast.LENGTH_LONG).show();
-
-
+                startActivity(new Intent(MoodInputUI.this, MainActivity.class));
             }
         });
     }

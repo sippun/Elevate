@@ -46,7 +46,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(android.R.drawable.ic_lock_idle_alarm) /* required */
+                        .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                         .setContentTitle("Elevate")
                         .setContentText("Have you started"+" "+taskTitle+"?");
 

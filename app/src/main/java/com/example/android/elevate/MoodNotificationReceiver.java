@@ -36,7 +36,7 @@ public class MoodNotificationReceiver extends BroadcastReceiver{
         channel.setLightColor(Color.BLUE);
         channel.enableVibration(true);
         channel.setVibrationPattern(null);
-        assert notificationManager != null; ////
+        assert notificationManager != null;
         notificationManager.createNotificationChannel(channel);
 
         NotificationCompat.Builder mBuilder =
