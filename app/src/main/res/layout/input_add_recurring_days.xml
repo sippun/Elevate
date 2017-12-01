@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/checkbox_group_recurring_days">
 
     <LinearLayout
@@ -36,7 +38,8 @@
             android:text="Thu" />
     </LinearLayout>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/days1"
@@ -47,20 +50,30 @@
             style="@style/checktextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fri" />
+            android:text="Fri"
+            app:layout_constraintBaseline_toBaselineOf="@+id/checkedSat"
+            app:layout_constraintEnd_toStartOf="@+id/checkedSat"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <CheckedTextView
             android:id="@+id/checkedSat"
             style="@style/checktextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sat" />
+            android:text="Sat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/checkedSun"
+            app:layout_constraintStart_toEndOf="@+id/checkedFri" />
 
         <CheckedTextView
             android:id="@+id/checkedSun"
             style="@style/checktextview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sun" />
-    </LinearLayout>
+            android:text="Sun"
+            app:layout_constraintBaseline_toBaselineOf="@+id/checkedSat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/checkedSat" />
+    </android.support.constraint.ConstraintLayout>
 </merge>

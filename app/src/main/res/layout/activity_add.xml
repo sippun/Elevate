@@ -38,61 +38,6 @@
             android:text="Habit"/>
     </RadioGroup>
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/text_StartDate"
-        android:layout_alignStart="@+id/radio_TaskType"
-        android:layout_marginBottom="20dp"
-        android:text="@string/repeat_optional"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/text_StartTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/text_EndTime"
-        android:layout_alignStart="@+id/textView5"
-        android:layout_marginBottom="18dp"
-        android:padding="5sp"
-        android:text="Start Time"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/text_EndTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/checkedFri"
-        android:layout_alignStart="@+id/checkedMon"
-        android:layout_marginBottom="52dp"
-        android:padding="5sp"
-        android:text="End Time"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/text_StartDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@id/text_TaskTitle"
-        android:layout_alignTop="@id/text_StartTime"
-        android:padding="5sp"
-        android:textColor="@color/colorAccent"
-        android:text="Date"
-        android:textSize="24sp"/>
-
-    <TextView
-        android:id="@+id/text_EndDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@id/text_TaskTitle"
-        android:layout_alignTop="@id/text_EndTime"
-        android:padding="5sp"
-        android:textColor="@color/colorAccent"
-        android:text="Date"
-        android:textSize="24sp"/>
 
     <Button
         android:id="@+id/button_CreateTask"
@@ -107,65 +52,6 @@
 
         android:elevation="0dp"
         android:text=">>" />
-
-
-    <CheckedTextView
-        android:id="@+id/checkedMon"
-        style="@style/checktextview"
-        android:layout_alignBottom="@+id/checkedFri"
-        android:layout_alignStart="@+id/text_StartTime"
-        android:layout_marginBottom="48dp"
-        android:text="Mon" />
-
-    <CheckedTextView
-        android:id="@+id/checkedTue"
-        style="@style/checktextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkedMon"
-        android:layout_alignBottom="@+id/checkedMon"
-        android:layout_toEndOf="@+id/checkedMon"
-        android:text="Tue" />
-
-    <CheckedTextView
-        android:id="@+id/checkedWed"
-        style="@style/checktextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkedTue"
-        android:layout_alignBottom="@+id/checkedTue"
-        android:layout_toEndOf="@+id/checkedTue"
-        android:text="Wed" />
-
-    <CheckedTextView
-        android:id="@+id/checkedThu"
-        style="@style/checktextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkedWed"
-        android:layout_alignBottom="@+id/checkedWed"
-        android:layout_toEndOf="@+id/checkedWed"
-        android:text="Thu" />
-
-    <CheckedTextView
-        android:id="@+id/checkedFri"
-        style="@style/checktextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_CreateTask"
-        android:layout_alignStart="@+id/checkedMon"
-        android:layout_marginBottom="48dp"
-        android:text="Fri" />
-
-    <CheckedTextView
-        android:id="@+id/checkedSat"
-        style="@style/checktextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_CreateTask"
-        android:layout_alignStart="@+id/checkedTue"
-        android:layout_marginBottom="48dp"
-        android:text="Sat" />
 
     <FrameLayout
         android:layout_width="match_parent"
