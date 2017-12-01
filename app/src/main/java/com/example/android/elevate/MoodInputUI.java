@@ -1,5 +1,7 @@
 package com.example.android.elevate;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -36,6 +38,8 @@ public class MoodInputUI extends AppCompatActivity {
                 // Toast Message
                 String ratingString = rating + " " + starCheck + " recorded";
                 Toast.makeText(getApplicationContext(), ratingString, Toast.LENGTH_LONG).show();
+
+
             }
         });
     }

@@ -30,6 +30,7 @@ public class DataBase {
     public HashMap<String,ArrayList<ToDoItem>> dayToItemsMap = new HashMap<>();
     public ArrayList<ToDoItem> todaysItemsList = new ArrayList<ToDoItem>();
     public HashMap<String, Integer[]> donenessHistory = new HashMap<>();
+    public HashMap<String, Integer> moodHistory = new HashMap<>();
     private String openDay = "000:0000";
 
     public DataBase(){}
@@ -41,7 +42,14 @@ public class DataBase {
         if (user != null) {
             userDataPath = "users/" + user.getUid();
             setupHistory();
+            recordMood(5);
         }
+    }
+
+
+    private void setupHistory(){
+        setupProductivityHistory();
+        setupMoodHistory();
     }
 
     //add to-do item to list of tasks on firebase
@@ -165,12 +173,12 @@ public class DataBase {
         }
     }
 
-    private void setupHistory(){
+    private void setupProductivityHistory(){
         String path = userDataPath + "/calendar/";
         int lastyear = Calendar.getInstance().get(Calendar.YEAR)+1;
         int numDaysInYear = 366;
 
-        for(int year = 2017; year <= lastyear; year++ )
+        for(int year = 2017; year <= lastyear; year++ ){
             for(int day= 1; day<=numDaysInYear; day++){
                 final String key = day+":"+year;
                 database.getReference(path+key).addValueEventListener(new ValueEventListener() {
@@ -178,7 +186,7 @@ public class DataBase {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.hasChildren()){
                             donenessHistory.put(key, getNumTasks(dataSnapshot));
-                            Log.d("history", key+ mapOfArraysToString(donenessHistory));
+                            Log.d("productivityHistory", key+ mapOfArraysToString(donenessHistory));
                         }
                     }
 
@@ -188,6 +196,7 @@ public class DataBase {
                     }
                 });
             }
+        }
     }
 
     private Integer[] getNumTasks(DataSnapshot dataSnapshot){
@@ -207,6 +216,59 @@ public class DataBase {
         Integer[] array = {completedTasks, totalTasks};
 
         return array;
+    }
+
+
+    public void recordMood( int rating ){
+        Calendar cal = Calendar.getInstance();
+        int day = cal.get(Calendar.DAY_OF_YEAR);
+        int year = cal.get(Calendar.YEAR);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        database.getReference(String.format("%s/mood/%d:%d/%d:%d",userDataPath, day, year, hour, minute)).setValue(rating);
+    }
+
+    private void setupMoodHistory(){
+        String path = userDataPath + "/mood/";
+        int lastyear = Calendar.getInstance().get(Calendar.YEAR)+1;
+        int numDaysInYear = 366;
+
+        for(int year = 2017; year <= lastyear; year++ ){
+            for(int day= 1; day<=numDaysInYear; day++){
+                final String key = day+":"+year;
+                database.getReference(path+key).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChildren()){
+                            moodHistory.put(key, getAverageMood(dataSnapshot));
+                            Log.d("moodHistory", String.format("%s = %s", key, moodHistory.toString()) );
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(TAG, "Something went wrong with getting mood data");
+                    }
+                });
+            }
+        }
+    }
+
+    private int getAverageMood(DataSnapshot dataSnapshot){
+        int numRecords = (int) dataSnapshot.getChildrenCount();
+        if(numRecords != 0) {
+            int moodPoints = 0;
+            for (DataSnapshot mood : dataSnapshot.getChildren()) {
+                if(mood.getValue(int.class) != null) {
+                    moodPoints += mood.getValue(int.class);
+                }else{
+                    numRecords = Math.max(numRecords-1, 1);
+                }
+            }
+            return moodPoints / numRecords;
+        }else{
+            return -1;
+        }
     }
 
     public void deleteTaskFuture( ToDoItem item ){
