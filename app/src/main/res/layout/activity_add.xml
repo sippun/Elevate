@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/button_CreateTask"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
@@ -21,7 +20,7 @@
 
     <RadioGroup
         android:id="@+id/radio_TaskType"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_TaskTitle"
         android:layout_alignLeft="@id/text_TaskTitle"
@@ -105,8 +104,10 @@
         android:layout_marginBottom="63dp"
         android:layout_marginEnd="47dp"
         android:backgroundTint="@color/colorAccent"
+
         android:elevation="0dp"
-        android:text="Create Task" />
+        android:text=">>" />
+
 
     <CheckedTextView
         android:id="@+id/checkedMon"
@@ -161,20 +162,10 @@
         style="@style/checktextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkedFri"
-        android:layout_alignBottom="@+id/checkedFri"
-        android:layout_toEndOf="@+id/checkedFri"
-        android:text="Sat" />
+        android:id="@+id/add_input_layout"
+        android:layout_below="@id/radio_TaskType">
+    </FrameLayout>
 
-    <CheckedTextView
-        android:id="@+id/checkedSun"
-        style="@style/checktextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkedSat"
-        android:layout_alignBottom="@+id/checkedSat"
-        android:layout_toEndOf="@+id/checkedSat"
-        android:text="Sun" />
 
 
 

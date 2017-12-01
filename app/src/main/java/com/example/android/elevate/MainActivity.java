@@ -34,20 +34,25 @@ public class MainActivity extends AppCompatActivity
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
-    //Hashmap stores <DAY, TODOITEM> pairs
-    //public HashMap<String,ArrayList<ToDoItem>> myDataMap = new HashMap<>();
+    //handles all firebase related things
     public DataBase database = new DataBase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //make mood prompts show at two customizable times of the day
+        createMoodPrompt(12,0);
+        createMoodPrompt(18,0);
         mAuth = FirebaseAuth.getInstance();
 
 
         userLogin(mAuth);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
+
+
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 userLogin(firebaseAuth);
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity
     private void userLogin(FirebaseAuth firebaseAuth){
         Log.d(TAG, "onAuthChanged");
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        database.logIntoFirebase();
         if (user != null) {
             // User is signed in
             Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -168,10 +174,9 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                //ToDoFragment f = (ToDoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                database.insertItem(title, time1, time2, recurringDays);
+                database.addNewItem(title, time1, time2, recurringDays);
 				
-				createNotification(title, time1);
+				        createNotification(title, time1);
                 String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
@@ -198,6 +203,30 @@ public class MainActivity extends AppCompatActivity
 
         assert alarmManager != null;
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    public void createMoodPrompt(int hour, int second){
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.SECOND, second);
+        // Setting intent to class where Alarm broadcast message will be handled
+        Intent intent = new Intent(this, MoodNotificationReceiver.class);
+        intent.setAction("com.example.android.elevate.MY_NOTIFICATION");
+
+        // Pending Intent for if user clicks on notification
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,0, intent, 0);
+
+        Toast.makeText(this, "Mood prompt will show at "+hour+":"+second,
+                Toast.LENGTH_LONG).show();
+
+        // Get instance of AlarmManager service
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        assert alarmManager != null;
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
