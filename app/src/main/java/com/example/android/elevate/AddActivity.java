@@ -340,4 +340,10 @@ public class AddActivity extends AppCompatActivity {
         time.set(Calendar.MONTH, month);
         time.set(Calendar.YEAR, year);
     };
+
+    public void check(CheckedTextView... blah){  // Set default checked
+        for(CheckedTextView bla: blah){
+            bla.setChecked(false);  // changed from true
+        }
+    }
 }
