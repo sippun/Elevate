@@ -162,6 +162,14 @@
         style="@style/checktextview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/button_CreateTask"
+        android:layout_alignStart="@+id/checkedTue"
+        android:layout_marginBottom="48dp"
+        android:text="Sat" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/add_input_layout"
         android:layout_below="@id/radio_TaskType">
     </FrameLayout>
