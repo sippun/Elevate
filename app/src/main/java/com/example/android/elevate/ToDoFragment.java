@@ -57,6 +57,8 @@ public class ToDoFragment extends Fragment {
 
         mAdapter.notifyDataSetChanged();
 
+        Log.d(TAG, dataBase.mapOfArraysToString(dataBase.donenessHistory) );
+
         return rootView;
     }
 

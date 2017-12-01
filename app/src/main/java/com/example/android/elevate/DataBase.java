@@ -29,6 +29,7 @@ public class DataBase {
     private String userDataPath = "users/guest";
     public HashMap<String,ArrayList<ToDoItem>> dayToItemsMap = new HashMap<>();
     public ArrayList<ToDoItem> todaysItemsList = new ArrayList<ToDoItem>();
+    public HashMap<String, Integer[]> donenessHistory = new HashMap<>();
     private String openDay = "000:0000";
 
     public DataBase(){}
@@ -39,7 +40,7 @@ public class DataBase {
 
         if (user != null) {
             userDataPath = "users/" + user.getUid();
-
+            setupHistory();
         }
     }
 
@@ -110,6 +111,7 @@ public class DataBase {
                     if(item != null &&
                             beforeOrOnDate(longCalAsString(item.startTime), today) &&
                             beforeOrOnDate(today, longCalAsString(item.endTime)) &&
+                            checkWeekDayRecur(stringCalAsCalendar(today), new ToDoItem(item).recurringDays) &&
                             !itemInList(fireBaseList, task.getKey())) {
 
                         Log.d(TAG, task.getKey() + " " + fireBaseList.toString());
@@ -162,7 +164,68 @@ public class DataBase {
             }
         }
     }
-    
+
+    private void setupHistory(){
+        String path = userDataPath + "/calendar/";
+        int lastyear = Calendar.getInstance().get(Calendar.YEAR)+1;
+        int numDaysInYear = 366;
+
+        for(int year = 2017; year <= lastyear; year++ )
+            for(int day= 1; day<=numDaysInYear; day++){
+                final String key = day+":"+year;
+                database.getReference(path+key).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChildren()){
+                            donenessHistory.put(key, getNumTasks(dataSnapshot));
+                            Log.d("history", key+ mapOfArraysToString(donenessHistory));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(TAG, "Something went wrong with getting the number of tasks");
+                    }
+                });
+            }
+    }
+
+    private Integer[] getNumTasks(DataSnapshot dataSnapshot){
+        int totalTasks = (int) dataSnapshot.getChildrenCount();
+        int completedTasks = 0;
+        for (DataSnapshot task: dataSnapshot.getChildren()) {
+            DBTaskItem item = task.getValue(DBTaskItem.class);
+            if (item != null){
+                if(item.done) {
+                    completedTasks++;
+                }
+            }else{
+                totalTasks = Math.max(totalTasks-1, 0);
+            }
+        }
+
+        Integer[] array = {completedTasks, totalTasks};
+
+        return array;
+    }
+
+    public void deleteTaskFuture( ToDoItem item ){
+
+    }
+
+    public void deleteTaskComplete( String itemId){
+
+    }
+
+    //changes the end date of a task
+    private void deleteTaskStartingFrom( String itemId, String start ){
+
+    }
+
+    //removes tasks from task list if the date is after the end date
+    private void clearExpiredTasks( ){
+
+    }
 
     private int getYear(String today){
         String[] part = today.split(":");
@@ -177,6 +240,13 @@ public class DataBase {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(date);
         return cal.get(Calendar.DAY_OF_YEAR) + ":" +cal.get(Calendar.YEAR);
+    }
+
+    private Calendar stringCalAsCalendar(String date){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_YEAR, getDay(date) );
+        cal.set(Calendar.YEAR, getYear(date) );
+        return cal;
     }
 
     private boolean beforeOrOnDate(String today, String reference){
@@ -199,7 +269,7 @@ public class DataBase {
     }
 
     //return true if recurList has pointer's weekday flagged as true
-    public boolean checkWeekDayRecur(Calendar pointer, boolean[] recurringDays){
+    private boolean checkWeekDayRecur(Calendar pointer, boolean[] recurringDays){
         switch(pointer.get(Calendar.DAY_OF_WEEK)){
             case Calendar.MONDAY: return recurringDays[0];
             case Calendar.TUESDAY: return recurringDays[1];
@@ -219,5 +289,13 @@ public class DataBase {
             }
         }
         return false;
+    }
+
+    public String mapOfArraysToString(HashMap<String, Integer[]> map){
+        ArrayList<String> newString = new ArrayList<String>();
+        for(String key: map.keySet()) {
+            newString.add(String.format("(%s=[%d, %d])", key, map.get(key)[0], map.get(key)[1]));
+        }
+        return newString.toString();
     }
 }
