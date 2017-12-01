@@ -10,16 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import android.widget.Toast;
-
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,8 +19,6 @@ public class ToDoFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    public ArrayList<ToDoItem> myDataset;
 
     String day_year;
     Calendar cal;
@@ -62,16 +50,22 @@ public class ToDoFragment extends Fragment {
         main = (MainActivity)getActivity();
         DataBase dataBase = main.database;
 
-        if(dataBase.dayToItemsMap.get(day_year) == null) {
-            dataBase.dayToItemsMap.put(day_year, main.database.activeItemsList);
-        }
+//        if(dataBase.dayToItemsMap.get(day_year) == null) {
+//            dataBase.dayToItemsMap.put(day_year, main.database.activeItemsList);
+//        }
 
-        mAdapter = new ToDoAdapter(dataBase.dayToItemsMap.get(day_year));
-
-        dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
-
+        Log.d(TAG, dataBase.todaysItemsList.toString());
+        mAdapter = new ToDoAdapter(dataBase.todaysItemsList);
         mRecyclerView.setAdapter(mAdapter);
-        //mAdapter.notifyDataSetChanged();
+        dataBase.refreshTodaysList(day_year, mAdapter);
+        //dataBase.addItemFromFirebaseToToDoFragment(mAdapter);
+
+
+        mAdapter.notifyDataSetChanged();
+
+
+        //
+
         return rootView;
     }
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/checkbox_group_recurring_days">
+
+    <LinearLayout
+        android:id="@+id/days1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+        <CheckedTextView
+            android:id="@+id/checkedMon"
+            style="@style/checktextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mon" />
+
+        <CheckedTextView
+            android:id="@+id/checkedTue"
+            style="@style/checktextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tue" />
+
+        <CheckedTextView
+            android:id="@+id/checkedWed"
+            style="@style/checktextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wed" />
+
+        <CheckedTextView
+            android:id="@+id/checkedThu"
+            style="@style/checktextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thu" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/days1"
+        android:layout_centerHorizontal="true">
+
+        <CheckedTextView
+            android:id="@+id/checkedFri"
+            style="@style/checktextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fri" />
+
+        <CheckedTextView
+            android:id="@+id/checkedSat"
+            style="@style/checktextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sat" />
+
+        <CheckedTextView
+            android:id="@+id/checkedSun"
+            style="@style/checktextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sun" />
+    </LinearLayout>
+</merge>

@@ -13,13 +13,10 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 /**
- * Created by katierosengrant on 10/29/17.
- *
- * Creates the habit reminder notification.
- * Change notification text/appearance here.
+ * Created by Jason on 11/23/2017.
  */
 
-public class NotificationReceiver extends BroadcastReceiver {
+public class MoodNotificationReceiver extends BroadcastReceiver{
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -27,30 +24,28 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        int NOTIFICATION_ID = 101;
+        int NOTIFICATION_ID = 102;
         int importance = NotificationManager.IMPORTANCE_HIGH;
-        String CHANNEL_ID = "habit_channel";
-        CharSequence name = "habit reminder";
-        String description = "habit reminder channel description";
-        String taskTitle = intent.getStringExtra("title");
-        System.out.print(taskTitle);
+        String CHANNEL_ID = "mood_channel";
+        CharSequence name = "mood channel";
+        String description = "mood prompt channel description";
 
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
         channel.enableLights(true);
-        channel.setLightColor(Color.RED);
+        channel.setLightColor(Color.BLUE);
         channel.enableVibration(true);
-        channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+        channel.setVibrationPattern(null);
         assert notificationManager != null; ////
         notificationManager.createNotificationChannel(channel);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(android.R.drawable.ic_lock_idle_alarm) /* required */
+                        .setSmallIcon(android.R.drawable.ic_popup_reminder) /* required */
                         .setContentTitle("Elevate")
-                        .setContentText("Have you started"+" "+taskTitle+"?");
+                        .setContentText("PLease log your mood");
 
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        Intent resultIntent = new Intent(context, MoodInputUI.class);
 
         // This ensures that navigating backward from the Activity leads out of
         // your app to the Home screen.
