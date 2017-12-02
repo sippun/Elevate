@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
@@ -105,6 +106,7 @@ public class AddActivity extends AppCompatActivity {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
         View addHabitView = inflater.inflate(R.layout.input_add_habit, parent);
+        addHabitView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right));
 
         final ArrayList<CheckedTextView> checkDays = initWeekdayRecurringList(true);
 
@@ -160,6 +162,8 @@ public class AddActivity extends AppCompatActivity {
         ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
 
         View addTaskView = inflater.inflate(R.layout.input_add_task, parent);
+        addTaskView.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left));
+
         final Calendar cal = Calendar.getInstance();
 
         //set up layout components of addTask page
