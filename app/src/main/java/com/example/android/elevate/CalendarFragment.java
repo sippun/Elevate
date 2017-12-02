@@ -32,6 +32,7 @@ public class CalendarFragment extends Fragment{
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 getFragmentManager().beginTransaction().
+                        setCustomAnimations(R.anim.slide_in, R.anim.slide_out).
                         replace(R.id.fragment_container, new ToDoFragment(dayOfMonth, month, year)).commit();
                 }
         });

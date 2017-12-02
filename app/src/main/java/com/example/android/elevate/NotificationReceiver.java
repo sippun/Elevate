@@ -8,8 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 /**
@@ -20,29 +18,31 @@ import android.support.v4.app.NotificationCompat;
  */
 
 public class NotificationReceiver extends BroadcastReceiver {
-    public static NotificationManager notificationManager;
+    private static NotificationManager notificationManager;
+    private String CHANNEL_ID = "task_channel";
+    NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "task reminder",
+            NotificationManager.IMPORTANCE_HIGH);
+    private static boolean channelSet = false;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
         // Notification built here
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        int importance = NotificationManager.IMPORTANCE_HIGH;
-        String CHANNEL_ID = "habit_channel";
-        CharSequence name = "habit reminder";
-        String description = "habit reminder channel description";
         String taskTitle = intent.getStringExtra("title");
         int NOTIFICATION_ID = intent.getIntExtra("id", 0);
 
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(description);
-        channel.enableLights(true);
-        channel.setLightColor(Color.RED);
-        channel.enableVibration(true);
-        channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-        assert notificationManager != null; ////
-        notificationManager.createNotificationChannel(channel);
+        assert notificationManager != null;
+
+        if(!channelSet){
+            channel.setDescription("task reminder description");
+            channel.enableLights(true);
+            channel.setLightColor(Color.RED);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            notificationManager.createNotificationChannel(channel);
+            channelSet = true;
+        }
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -63,5 +63,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         // pass the Notification object to the system
         notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+    }
+
+    public static void cancel(int id){
+        notificationManager.cancel(id);
     }
 }

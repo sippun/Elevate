@@ -16,6 +16,7 @@ import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -157,6 +158,7 @@ public class AddActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
+
         View addTaskView = inflater.inflate(R.layout.input_add_task, parent);
         final Calendar cal = Calendar.getInstance();
 

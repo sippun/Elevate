@@ -145,10 +145,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_calendar) {
             getSupportFragmentManager().beginTransaction().
+                    setCustomAnimations(R.anim.slide_in, R.anim.slide_out).
                     replace(R.id.fragment_container, new CalendarFragment()).
                     addToBackStack(null).commit();
         } else if (id == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().
+                    setCustomAnimations(R.anim.slide_in, R.anim.slide_out).
                     replace(R.id.fragment_container, new ToDoFragment()).
                     addToBackStack(null).commit();
         } else if (id == R.id.nav_mood) {
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
 
-                int notification_id = rand.nextInt(500);
+                int notification_id = rand.nextInt(5000);
 
                 database.addNewItem(title, time1, time2, recurringDays, notification_id);
 				
@@ -203,9 +205,6 @@ public class MainActivity extends AppCompatActivity
         // Pending Intent for if user clicks on notification
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this,0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Toast.makeText(this, "notification created at "+startTime.getTime(),
-                Toast.LENGTH_LONG).show();
 
         // Get instance of AlarmManager service
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

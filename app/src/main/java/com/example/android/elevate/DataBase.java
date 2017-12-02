@@ -167,7 +167,7 @@ public class DataBase {
                 item.done = done;
                 if(done){
                     //if done is true, cancel all notifications related to this item
-                    NotificationReceiver.notificationManager.cancel(item.getNotifId());
+                    NotificationReceiver.cancel(item.getNotifId());
                 }
             }
         }
