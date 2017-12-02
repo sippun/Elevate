@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity
 
     //handles all firebase related things
     public static DataBase database = new DataBase();
+
+    //RNG for generating notification id of each item
     Random rand = new Random();
+    public static int currentPage = R.id.nav_home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,16 +146,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_calendar) {
+        if (id == R.id.nav_calendar && currentPage != R.id.nav_calendar) {
             getSupportFragmentManager().beginTransaction().
-                    setCustomAnimations(R.anim.slide_in, R.anim.slide_out).
+                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
                     replace(R.id.fragment_container, new CalendarFragment()).
                     addToBackStack(null).commit();
-        } else if (id == R.id.nav_home) {
+            currentPage = R.id.nav_calendar;
+
+        } else if (id == R.id.nav_home && currentPage != R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().
-                    setCustomAnimations(R.anim.slide_in, R.anim.slide_out).
+                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
                     replace(R.id.fragment_container, new ToDoFragment()).
                     addToBackStack(null).commit();
+            currentPage = R.id.nav_home;
+
         } else if (id == R.id.nav_mood) {
             Intent a = new Intent(MainActivity.this, MoodInputUI.class);
             startActivity(a);
