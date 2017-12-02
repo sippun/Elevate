@@ -18,7 +18,7 @@
             android:text="Date"
             android:textColor="@color/black"
             android:textSize="24sp" />
-        
+
         <View
             android:layout_width="10dp"
             android:layout_height="match_parent" />

@@ -12,6 +12,7 @@ public class DBTaskItem {
     public long startTime, endTime; //Unix timestamp
     boolean done;
     List<Boolean> recurringDays;
+    int notifId;
 
     public DBTaskItem(){
         recurringDays = new ArrayList<Boolean>();
@@ -20,11 +21,12 @@ public class DBTaskItem {
         }
     }
 
-    public DBTaskItem(String name, long startTime, long endTime, boolean done, List<Boolean> recurringDays) {
+    public DBTaskItem(String name, long startTime, long endTime, boolean done, List<Boolean> recurringDays, int notifId) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.done = done;
         this.recurringDays = recurringDays;
+        this.notifId = notifId;
     }
 }
