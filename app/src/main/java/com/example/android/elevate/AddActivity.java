@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -107,18 +112,17 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 boolean[] recurringDays = getRecurringDays(checkDays);
-
-//                DBHabitItem newHabit = new DBHabitItem(taskTitle.getText().toString(),
-//                        recurringDays);
-//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                if(user != null && newHabit != null) {
-//                    FirebaseDatabase.getInstance().getReference()
-//                            .child("users")
-//                            .child(user.getUid())
-//                            .child("habits")
-//                            .push()
-//                            .setValue(newHabit);
-//                }
+                DBHabitItem newHabit = new DBHabitItem(taskTitle.getText().toString(),
+                        recurringDays);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if(user != null && newHabit != null) {
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("users")
+                            .child(user.getUid())
+                            .child("habits")
+                            .push()
+                            .setValue(newHabit);
+                }
 
                 time1.set(Calendar.SECOND, 0);
                 time2.set(Calendar.SECOND, 0); // temp
@@ -284,7 +288,7 @@ public class AddActivity extends AppCompatActivity {
             public void onClick(View v){
               
                 boolean[] recurringDays = getRecurringDays(checkDays);
-                TaskItem newTask = new TaskItem(taskTitle.getText().toString(),
+                ToDoItem newTask = new ToDoItem(taskTitle.getText().toString(),
 
                         time1.getTimeInMillis(),
                         time2.getTimeInMillis(),
@@ -336,4 +340,10 @@ public class AddActivity extends AppCompatActivity {
         time.set(Calendar.MONTH, month);
         time.set(Calendar.YEAR, year);
     };
+
+    public void check(CheckedTextView... blah){  // Set default checked
+        for(CheckedTextView bla: blah){
+            bla.setChecked(false);  // changed from true
+        }
+    }
 }
