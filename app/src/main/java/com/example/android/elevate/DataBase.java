@@ -2,6 +2,7 @@ package com.example.android.elevate;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -9,6 +10,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -55,7 +58,6 @@ public class DataBase {
         }
 
         ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays, notifId);
-
         if(user != null) {
             Log.d(TAG+"addTask", item.toString());
             DatabaseReference ref= database.getReference(userDataPath+"/tasks");
@@ -63,7 +65,16 @@ public class DataBase {
             item.setId(key);
             ref.child("/"+key).setValue( item.createDataBaseEntry() );
         }
+    }
 
+    public void addNewHabit(String name, boolean[] recurringDays) {
+        DBHabitItem newHabit = new DBHabitItem(name, recurringDays);
+
+        if(user != null) {
+            DatabaseReference ref= database.getReference(userDataPath+"/habits");
+            String key = ref.push().getKey();
+            ref.child("/"+key).setValue( newHabit );
+        }
     }
 
     private int getDayOfWeek(Calendar day){
@@ -172,9 +183,9 @@ public class DataBase {
         for (ToDoItem item: todaysItemsList) {
             if(item.id.equals(itemID)) {
                 item.done = done;
-                if(done){
+                if(done && item.getNotifId()>0 ){
                     //if done is true, cancel all notifications related to this item
-                    NotificationReceiver.cancel(item.getNotifId());
+                    MainActivity.cancel(item.getNotifId());
                 }
             }
         }

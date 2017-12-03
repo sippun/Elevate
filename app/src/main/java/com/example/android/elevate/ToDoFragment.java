@@ -33,6 +33,12 @@ public class ToDoFragment extends Fragment {
         day_year =  cal.get(Calendar.DAY_OF_YEAR) + ":" +year;
     }
 
+    @SuppressLint("ValidFragment")
+    public ToDoFragment(Calendar cal){
+        day_year = cal.get(Calendar.DAY_OF_YEAR) +":" +
+                cal.get(Calendar.YEAR);
+    }
+
     public ToDoFragment(){
         cal = Calendar.getInstance();
         day_year = cal.get(Calendar.DAY_OF_YEAR) +":" +
