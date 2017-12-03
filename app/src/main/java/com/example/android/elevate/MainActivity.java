@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,33 +31,38 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private static boolean moodPromptSet = false;
 
     // Choose an arbitrary request code value
     private static final int RC_SIGN_IN = 123;
 
     //handles all firebase related things
-    public DataBase database = new DataBase();
+    public static DataBase database = new DataBase();
+
+    //RNG for generating notification id of each item
+    Random rand = new Random();
+    public static int currentPage = R.id.nav_home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //make mood prompts show at two customizable times of the day
-        createMoodPrompt(12,0);
-        createMoodPrompt(18,0);
+        if(!moodPromptSet) {
+            //make mood prompts show at two customizable times of the day
+            createMoodPrompt(12, 0);
+            createMoodPrompt(18, 0);
+            moodPromptSet = true;
+        }
+
         mAuth = FirebaseAuth.getInstance();
-
-
         userLogin(mAuth);
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
 
 
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 userLogin(firebaseAuth);
-
             }
         };
 
@@ -140,12 +146,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_calendar) {
+        if (id == R.id.nav_calendar && currentPage != R.id.nav_calendar) {
             getSupportFragmentManager().beginTransaction().
-                    replace(R.id.fragment_container, new CalendarFragment()).commit();
-        } else if (id == R.id.nav_home) {
+                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
+                    replace(R.id.fragment_container, new CalendarFragment()).
+                    addToBackStack(null).commit();
+            currentPage = R.id.nav_calendar;
+
+        } else if (id == R.id.nav_home && currentPage != R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().
-                    replace(R.id.fragment_container, new ToDoFragment()).commit();
+                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
+                    replace(R.id.fragment_container, new ToDoFragment()).
+                    addToBackStack(null).commit();
+            currentPage = R.id.nav_home;
+
         } else if (id == R.id.nav_mood) {
             Intent a = new Intent(MainActivity.this, MoodInputUI.class);
             startActivity(a);
@@ -174,29 +188,30 @@ public class MainActivity extends AppCompatActivity
                 Calendar time1 = (Calendar) data.getExtras().get("time1");
                 Calendar time2 = (Calendar) data.getExtras().get("time2");
                 boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                database.addNewItem(title, time1, time2, recurringDays);
+
+                int notification_id = rand.nextInt(5000);
+
+                database.addNewItem(title, time1, time2, recurringDays, notification_id);
 				
-				        createNotification(title, time1);
-                String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
+                createNotification(title, time1, notification_id);
+                String msg = title + notification_id+ " created from " + time1.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
             }
         }
     }
 
-    public void createNotification(String title, Calendar startTime){
+    public void createNotification(String title, Calendar startTime, int notification_id){
 
         // Setting intent to class where Alarm broadcast message will be handled
         Intent intent = new Intent(this, NotificationReceiver.class);
         intent.setAction("com.example.android.elevate.MY_NOTIFICATION");
         intent.putExtra("title", title);
+        intent.putExtra("id", notification_id);
 
         // Pending Intent for if user clicks on notification
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this,0, intent, 0);
-
-        Toast.makeText(this, "notification created at "+startTime.getTime(),
-                Toast.LENGTH_LONG).show();
+                this,0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Get instance of AlarmManager service
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -217,7 +232,7 @@ public class MainActivity extends AppCompatActivity
 
         // Pending Intent for if user clicks on notification
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this,0, intent, 0);
+                this,0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Toast.makeText(this, "Mood prompt will show at "+hour+":"+second,
                 Toast.LENGTH_LONG).show();

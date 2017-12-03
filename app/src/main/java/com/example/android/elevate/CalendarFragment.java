@@ -56,6 +56,11 @@ public class CalendarFragment extends Fragment{
                 getFragmentManager().beginTransaction().
                         replace(R.id.fragment_container, new ToDoFragment(Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR)).commit();
             }
+                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
+                        replace(R.id.fragment_container, new ToDoFragment(dayOfMonth, month, year)).
+                        addToBackStack(null).
+                        commit();
+                }
         });
 
         setDayColors(v);

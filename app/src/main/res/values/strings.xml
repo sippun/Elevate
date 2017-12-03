@@ -14,5 +14,6 @@
     <string name="mood_prompt">How are you feeling right now?</string>
 
     <string name="submitMood">Submit</string>
-
+    <string name="repeat_optional">Repeat (optional)</string>
+    <string name="elevate_tagline"><![CDATA[Productivity & Mood Tracker]]></string>
 </resources>

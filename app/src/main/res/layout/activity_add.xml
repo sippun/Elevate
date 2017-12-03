@@ -11,12 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="24dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
         android:ems="10"
         android:hint="Task Title"
         android:inputType="text"
-        android:textSize="24sp"/>
+        android:textSize="24sp" />
 
     <RadioGroup
         android:id="@+id/radio_TaskType"
@@ -38,14 +38,18 @@
             android:text="Habit"/>
     </RadioGroup>
 
+
     <Button
         android:id="@+id/button_CreateTask"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/text_TaskTitle"
-        android:layout_alignTop="@id/text_TaskTitle"
-        android:backgroundTint="@android:color/holo_blue_light"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="63dp"
+        android:layout_marginEnd="47dp"
+        android:backgroundTint="@color/colorAccent"
+
         android:elevation="0dp"
         android:text=">>" />
 
@@ -55,6 +59,8 @@
         android:id="@+id/add_input_layout"
         android:layout_below="@id/radio_TaskType">
     </FrameLayout>
+
+
 
 
 </RelativeLayout>

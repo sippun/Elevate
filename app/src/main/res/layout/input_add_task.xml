@@ -14,12 +14,11 @@
             android:id="@+id/text_StartDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/holo_blue_bright"
-            android:backgroundTint="@android:color/holo_blue_bright"
             android:padding="5sp"
             android:text="Date"
+            android:textColor="@color/black"
             android:textSize="24sp" />
-        
+
         <View
             android:layout_width="10dp"
             android:layout_height="match_parent" />
@@ -30,6 +29,7 @@
             android:layout_height="wrap_content"
             android:padding="5sp"
             android:text="Start Time"
+            android:textColor="@color/black"
             android:textSize="24sp"/>
     </LinearLayout>
 
@@ -39,9 +39,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/row_start"
         android:layout_alignLeft="@id/row_start"
-        android:background="@android:color/holo_green_light"
         android:padding="5sp"
         android:text="Date"
+        android:textColor="@color/black"
         android:textSize="24sp"/>
 
     <TextView
@@ -52,7 +52,17 @@
         android:layout_alignEnd="@id/row_start"
         android:padding="5sp"
         android:text="End Time"
+        android:textColor="@color/black"
         android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView_repeat_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_EndDate"
+        android:layout_alignStart="@id/text_EndDate"
+        android:text="@string/repeat_optional"
+        android:textSize="18sp" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
