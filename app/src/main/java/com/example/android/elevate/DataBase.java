@@ -52,8 +52,11 @@ public class DataBase {
     }
 
     //add to-do item to list of tasks on firebase
-    public void addNewTask(String name, Calendar startTime,
-                           Calendar endTime,boolean[] recurringDays, int notifId){
+    public void addNewItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays, int notifId){
+        if(startTime.get(Calendar.DATE) == endTime.get(Calendar.DATE)){
+            recurringDays[getDayOfWeek(startTime)] = true;
+        }
+
         ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays, notifId);
         if(user != null) {
             Log.d(TAG+"addTask", item.toString());
@@ -72,6 +75,11 @@ public class DataBase {
             String key = ref.push().getKey();
             ref.child("/"+key).setValue( newHabit );
         }
+    }
+
+    private int getDayOfWeek(Calendar day){
+        //add 5 and mod 7 to handle monday being the first day of the week.
+        return (day.get(Calendar.DAY_OF_WEEK)+5) % 7;
     }
 
     //setup todaysItemsList for use
@@ -145,8 +153,6 @@ public class DataBase {
     }
     private void updateLocal(final String today, final RecyclerView.Adapter mAdapter){
         final DatabaseReference tasks = database.getReference(userDataPath+"/calendar/"+today);
-        Log.d(TAG, today);
-
 
         tasks.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -159,7 +165,6 @@ public class DataBase {
                     }
                 }
                 mAdapter.notifyDataSetChanged();
-                Log.d(TAG+"Refresh", todaysItemsList.toString());
             }
 
             @Override
@@ -173,7 +178,8 @@ public class DataBase {
         //update Firebase:
         String path = userDataPath+"/calendar/"+ openDay+"/"+itemID+"/done";
         database.getReference(path).setValue(done);
-        //update Local: (not strictly necessary, but there is a noticeable lag in display of recently changed values otherwise)
+        //update Local: (not strictly necessary, but there
+        // is a noticeable lag in display of recently changed values otherwise)
         for (ToDoItem item: todaysItemsList) {
             if(item.id.equals(itemID)) {
                 item.done = done;
@@ -198,7 +204,6 @@ public class DataBase {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.hasChildren()){
                             donenessHistory.put(key, getNumTasks(dataSnapshot));
-                            Log.d("productivityHistory", key+ mapOfArraysToString(donenessHistory));
                         }
                     }
 
@@ -281,24 +286,6 @@ public class DataBase {
         }else{
             return -1;
         }
-    }
-
-    public void deleteTaskFuture( ToDoItem item ){
-
-    }
-
-    public void deleteTaskComplete( String itemId){
-
-    }
-
-    //changes the end date of a task
-    private void deleteTaskStartingFrom( String itemId, String start ){
-
-    }
-
-    //removes tasks from task list if the date is after the end date
-    private void clearExpiredTasks( ){
-
     }
 
     private int getYear(String today){
