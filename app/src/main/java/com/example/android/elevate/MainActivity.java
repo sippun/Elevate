@@ -173,15 +173,25 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 String title = data.getStringExtra("title");
-                Calendar time1 = (Calendar) data.getExtras().get("time1");
-                Calendar time2 = (Calendar) data.getExtras().get("time2");
-                boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                database.addNewItem(title, time1, time2, recurringDays);
-				
-				        createNotification(title, time1);
-                String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
-                Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
-                toast.show();
+                if (data.getStringExtra("type").equals("task")) {
+                    Calendar time1 = (Calendar) data.getExtras().get("time1");
+                    Calendar time2 = (Calendar) data.getExtras().get("time2");
+                    boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
+                    database.addNewTask(title, time1, time2, recurringDays);
+
+                    createNotification(title, time1);
+                    String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
+                    Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
+                    toast.show();
+                } else if (data.getStringExtra("type").equals("habit")) {
+                    boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
+                    database.addNewHabit(title, recurringDays);
+
+//                    createNotification(title, time1);
+//                    String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
+//                    Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
+//                    toast.show();
+                }
             }
         }
     }

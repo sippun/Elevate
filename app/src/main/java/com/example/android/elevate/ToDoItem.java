@@ -4,8 +4,6 @@ package com.example.android.elevate;
  * Created by Joel on 10/28/2017.
  */
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

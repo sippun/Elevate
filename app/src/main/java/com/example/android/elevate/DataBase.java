@@ -2,7 +2,6 @@ package com.example.android.elevate;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -12,7 +11,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -53,7 +51,7 @@ public class DataBase {
     }
 
     //add to-do item to list of tasks on firebase
-    public void addNewItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays){
+    public void addNewTask(String name, Calendar startTime, Calendar endTime, boolean[] recurringDays){
         ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays);
 
         if(user != null) {
@@ -63,7 +61,16 @@ public class DataBase {
             item.setId(key);
             ref.child("/"+key).setValue( item.createDataBaseEntry() );
         }
+    }
 
+    public void addNewHabit(String name, boolean[] recurringDays) {
+        DBHabitItem newHabit = new DBHabitItem(name, recurringDays);
+
+        if(user != null) {
+            DatabaseReference ref= database.getReference(userDataPath+"/habits");
+            String key = ref.push().getKey();
+            ref.child("/"+key).setValue( newHabit );
+        }
     }
 
     //setup todaysItemsList for use
