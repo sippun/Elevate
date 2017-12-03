@@ -8,42 +8,42 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+
+import java.util.Random;
 
 /**
  * Created by Jason on 11/23/2017.
  */
 
 public class MoodNotificationReceiver extends BroadcastReceiver{
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
         // Notification built here
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        int NOTIFICATION_ID = 102;
+        int NOTIFICATION_ID = intent.getIntExtra("id", 12);
         int importance = NotificationManager.IMPORTANCE_HIGH;
         String CHANNEL_ID = "mood_channel";
         CharSequence name = "mood channel";
-        String description = "mood prompt channel description";
+        String description = "mood prompt description";
 
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(description);
-        channel.enableLights(true);
-        channel.setLightColor(Color.BLUE);
-        channel.enableVibration(true);
-        channel.setVibrationPattern(null);
-        assert notificationManager != null; ////
-        notificationManager.createNotificationChannel(channel);
+        NotificationChannel mood_channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        mood_channel.setDescription(description);
+        mood_channel.enableLights(true);
+        mood_channel.setLightColor(Color.BLUE);
+        mood_channel.enableVibration(true);
+        mood_channel.setVibrationPattern(null);
+        assert notificationManager != null;
+        notificationManager.createNotificationChannel(mood_channel);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(android.R.drawable.ic_popup_reminder) /* required */
                         .setContentTitle("Elevate")
-                        .setContentText("PLease log your mood");
+                        .setContentText("Please log your mood")
+                        .setAutoCancel(true);
 
         Intent resultIntent = new Intent(context, MoodInputUI.class);
 

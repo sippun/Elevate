@@ -13,6 +13,7 @@ public class ToDoItem {
     long startTime, endTime; //Unix timestamp
     boolean done;
     boolean[] recurringDays;
+    int notifId = -1; //notification id used to create or remove notifications, randomly generated in
 
     public ToDoItem(DBTaskItem item){
         name = item.name;
@@ -20,6 +21,7 @@ public class ToDoItem {
         this.startTime = item.startTime;
         this.endTime = item.endTime;
         done = item.done;
+        this.notifId = item.notifId;
 
         recurringDays= new boolean[7];
         for(int i=0; i<7; i++){
@@ -27,7 +29,7 @@ public class ToDoItem {
         }
     }
 
-    public ToDoItem(String name, Calendar startTime, Calendar endTime, boolean[] recurringDays){
+    public ToDoItem(String name, Calendar startTime, Calendar endTime, boolean[] recurringDays, int notifId){
 
         this.name = name;
         this.id = name.toLowerCase()+"ID"; //eventually should use actual push function to create unique ids
@@ -35,9 +37,10 @@ public class ToDoItem {
         this.endTime = endTime.getTimeInMillis();
         done = false;
         this.recurringDays = recurringDays;
+        this.notifId = notifId;
     }
 
-    public ToDoItem(String name, long startTime, long endTime, boolean[] recurringDays){
+    public ToDoItem(String name, long startTime, long endTime, boolean[] recurringDays, int notifId){
 
         this.name = name;
         this.id = name.toLowerCase()+"ID"; //eventually should use actual push function to create unique ids
@@ -45,6 +48,7 @@ public class ToDoItem {
         this.endTime = endTime;
         done = false;
         this.recurringDays = recurringDays;
+        this.notifId = notifId;
     }
 
     public String getName(){
@@ -64,11 +68,14 @@ public class ToDoItem {
         cal.setTimeInMillis(endTime);
         return cal;
     }
+
+    public int getNotifId(){
+        return notifId;
+    }
+
     public boolean[] getRecurringDays(){ return recurringDays; }
 
-
     public void finish(){done = true;}
-
 
     public String toString(){
         return name+ ": " +id+" " + done;
@@ -84,7 +91,9 @@ public class ToDoItem {
     }
 
     public DBTaskItem createDataBaseEntry(){
-        return new DBTaskItem(name, startTime, endTime, done, arrayToList(recurringDays));
+        return new DBTaskItem(name, startTime, endTime, done, arrayToList(recurringDays), notifId);
     }
+
+
 }
 

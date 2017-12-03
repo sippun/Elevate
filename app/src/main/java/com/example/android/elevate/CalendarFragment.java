@@ -1,7 +1,5 @@
 package com.example.android.elevate;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,7 +30,10 @@ public class CalendarFragment extends Fragment{
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 getFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new ToDoFragment(dayOfMonth, month, year)).commit();
+                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
+                        replace(R.id.fragment_container, new ToDoFragment(dayOfMonth, month, year)).
+                        addToBackStack(null).
+                        commit();
                 }
         });
         setDayColors(v);

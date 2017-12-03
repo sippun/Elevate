@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -99,6 +101,7 @@ public class AddActivity extends AppCompatActivity {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
         View addHabitView = inflater.inflate(R.layout.input_add_habit, parent);
+        addHabitView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right));
 
         final ArrayList<CheckedTextView> checkDays = initWeekdayRecurringList(true);
 
@@ -150,7 +153,10 @@ public class AddActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup parent = (ViewGroup)findViewById(R.id.add_input_layout);
+
         View addTaskView = inflater.inflate(R.layout.input_add_task, parent);
+        addTaskView.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left));
+
         final Calendar cal = Calendar.getInstance();
 
         //set up layout components of addTask page
@@ -281,31 +287,6 @@ public class AddActivity extends AppCompatActivity {
             public void onClick(View v){
               
                 boolean[] recurringDays = getRecurringDays(checkDays);
-                ToDoItem newTask = new ToDoItem(taskTitle.getText().toString(),
-
-                        time1.getTimeInMillis(),
-                        time2.getTimeInMillis(),
-                        recurringDays);
-
-                //This should be done in the DataBase!! (From the MainActivity?)
-//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                Log.d(TAG+"addTask", newTask.name);
-//
-//
-//
-//                if(user != null) {
-//                    Log.d(TAG+"addTask", newTask.toString());
-//                    FirebaseDatabase.getInstance().getReference()
-//                            .child("users")
-//                            .child(user.getUid())
-//                            .child("tasks")
-//                            .push()
-//                            .setValue(newTask.createDataBaseEntry());
-//                }else{
-//                    Log.d(TAG+"addTask", "user =null");
-//
-//                }
-
                 if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);
                     intent.putExtra("title", taskTitle.getText().toString());
@@ -334,10 +315,4 @@ public class AddActivity extends AppCompatActivity {
         time.set(Calendar.MONTH, month);
         time.set(Calendar.YEAR, year);
     };
-
-    public void check(CheckedTextView... blah){  // Set default checked
-        for(CheckedTextView bla: blah){
-            bla.setChecked(false);  // changed from true
-        }
-    }
 }

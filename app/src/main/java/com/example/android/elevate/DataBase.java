@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -51,9 +52,9 @@ public class DataBase {
     }
 
     //add to-do item to list of tasks on firebase
-    public void addNewTask(String name, Calendar startTime, Calendar endTime, boolean[] recurringDays){
-        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays);
-
+    public void addNewTask(String name, Calendar startTime,
+                           Calendar endTime,boolean[] recurringDays, int notifId){
+        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays, notifId);
         if(user != null) {
             Log.d(TAG+"addTask", item.toString());
             DatabaseReference ref= database.getReference(userDataPath+"/tasks");
@@ -176,6 +177,10 @@ public class DataBase {
         for (ToDoItem item: todaysItemsList) {
             if(item.id.equals(itemID)) {
                 item.done = done;
+                if(done && item.getNotifId()>0 ){
+                    //if done is true, cancel all notifications related to this item
+                    MainActivity.cancel(item.getNotifId());
+                }
             }
         }
     }
