@@ -2,9 +2,12 @@ package com.example.android.elevate;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -42,11 +45,13 @@ public class MainActivity extends AppCompatActivity
     //RNG for generating notification id of each item
     Random rand = new Random();
     public static int currentPage = R.id.nav_home;
+    static NotificationManager nm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         if(!moodPromptSet) {
             //make mood prompts show at two customizable times of the day
@@ -192,11 +197,16 @@ public class MainActivity extends AppCompatActivity
                 int notification_id = rand.nextInt(5000);
 
                 database.addNewItem(title, time1, time2, recurringDays, notification_id);
-				
+
                 createNotification(title, time1, notification_id);
                 String msg = title + notification_id+ " created from " + time1.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
                 toast.show();
+
+                //getSupportFragmentManager().beginTransaction().
+                //        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
+                //        replace(R.id.fragment_container, new ToDoFragment(time1)).
+                //        commit();
             }
         }
     }
@@ -230,6 +240,10 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, MoodNotificationReceiver.class);
         intent.setAction("com.example.android.elevate.MY_NOTIFICATION");
 
+        //assign static notification id
+        //avoids creating duplicate notifications when launching main again
+        intent.putExtra("id", hour);
+
         // Pending Intent for if user clicks on notification
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this,0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -245,4 +259,13 @@ public class MainActivity extends AppCompatActivity
                 AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
+    //dismiss active future notifications of given id, usually after task is marked as done
+    public static void cancel(int id){
+        StatusBarNotification[] notifications = nm.getActiveNotifications();
+        for (StatusBarNotification notification : notifications) {
+            if (notification.getId() == id) {
+                nm.cancel(id);
+            }
+        }
+    }
 }

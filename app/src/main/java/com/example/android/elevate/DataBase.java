@@ -165,9 +165,9 @@ public class DataBase {
         for (ToDoItem item: todaysItemsList) {
             if(item.id.equals(itemID)) {
                 item.done = done;
-                if(done){
+                if(done && item.getNotifId()>0 ){
                     //if done is true, cancel all notifications related to this item
-                    NotificationReceiver.cancel(item.getNotifId());
+                    MainActivity.cancel(item.getNotifId());
                 }
             }
         }

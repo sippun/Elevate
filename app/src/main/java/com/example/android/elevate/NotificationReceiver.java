@@ -1,5 +1,6 @@
 package com.example.android.elevate;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 
 /**
@@ -48,7 +50,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                         .setContentTitle("Elevate")
-                        .setContentText("Have you started"+" "+taskTitle+" "+NOTIFICATION_ID+"?");
+                        .setContentText("Have you started"+" "+taskTitle+" "+NOTIFICATION_ID+"?")
+                        .setAutoCancel(true);
 
         Intent resultIntent = new Intent(context, MainActivity.class);
 
@@ -63,9 +66,5 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         // pass the Notification object to the system
         notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-    }
-
-    public static void cancel(int id){
-        notificationManager.cancel(id);
     }
 }
