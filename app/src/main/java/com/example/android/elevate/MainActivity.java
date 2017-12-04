@@ -168,12 +168,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_mood) {
             Intent a = new Intent(MainActivity.this, MoodInputUI.class);
             startActivity(a);
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_StartDate"
+        android:paddingBottom="24dp"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true">
 
@@ -26,7 +27,6 @@
             android:id="@+id/text_StartTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5sp"
             android:text="Start Time"
             android:textColor="@color/black"
             android:textSize="24sp"/>

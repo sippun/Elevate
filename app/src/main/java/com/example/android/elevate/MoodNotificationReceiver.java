@@ -40,9 +40,9 @@ public class MoodNotificationReceiver extends BroadcastReceiver{
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(android.R.drawable.ic_popup_reminder) /* required */
+                        .setSmallIcon(R.drawable.ic_record_mood) /* required */
                         .setContentTitle("Elevate")
-                        .setContentText("Please log your mood")
+                        .setContentText("Please record your mood")
                         .setAutoCancel(true);
 
         Intent resultIntent = new Intent(context, MoodInputUI.class);
