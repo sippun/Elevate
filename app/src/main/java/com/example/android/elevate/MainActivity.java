@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 String title = data.getStringExtra("title");
+
                 if (data.getStringExtra("type").equals("task")) {
                     Calendar time1 = (Calendar) data.getExtras().get("time1");
                     Calendar time2 = (Calendar) data.getExtras().get("time2");
