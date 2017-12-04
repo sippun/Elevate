@@ -66,13 +66,20 @@ public class DataBase {
         }
     }
 
-    public void addNewHabit(String name, boolean[] recurringDays) {
-        DBHabitItem newHabit = new DBHabitItem(name, recurringDays);
+    public void addNewHabit(String name, boolean[] recurringDays, int notifId) {
+        Calendar startTime, endTime;
+        startTime = Calendar.getInstance();
+        endTime = Calendar.getInstance();
+        startTime.setTime(startTime.getTime());
+        endTime.setTime(endTime.getTime());
+
+        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays, notifId);
 
         if(user != null) {
-            DatabaseReference ref= database.getReference(userDataPath+"/habits");
+            DatabaseReference ref= database.getReference(userDataPath+"/tasks"); //lol
             String key = ref.push().getKey();
-            ref.child("/"+key).setValue( newHabit );
+            item.setId(key);
+            ref.child("/"+key).setValue( item.createDataBaseEntry() );
         }
     }
 
@@ -110,7 +117,7 @@ public class DataBase {
                 firebaseListToCalendar("/tasks", "/calendar/"+today, today, fireBaseList,mAdapter);
                 //including this seems to duplicate all tasks, despite there not being any habits yet.
                 // Probably because it is adding from the same list two separate times simultaneously?.
-                // firebaseListToCalendar("/habits", "/calendar/"+today, today, fireBaseList, mAdapter);
+                //firebaseListToCalendar("/habits", "/calendar/"+today, today, fireBaseList, mAdapter);
             }
 
             @Override

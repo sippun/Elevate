@@ -204,7 +204,8 @@ public class MainActivity extends AppCompatActivity
                     toast.show();
                 } else if (data.getStringExtra("type").equals("habit")) {
                     boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
-                    database.addNewHabit(title, recurringDays);
+                    int notification_id = rand.nextInt(5000);
+                    database.addNewHabit(title, recurringDays, notification_id);
 
 //                    createNotification(title, time1);
 //                    String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
