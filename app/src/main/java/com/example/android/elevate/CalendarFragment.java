@@ -34,6 +34,7 @@ public class CalendarFragment extends Fragment{
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        //listeners to detect and redraw when the task/mood switches are toggled
         final Switch tasks = v.findViewById(R.id.tasks);
         tasks.setOnClickListener(new View.OnClickListener() {
             @Override
