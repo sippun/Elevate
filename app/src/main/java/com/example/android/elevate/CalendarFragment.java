@@ -68,7 +68,10 @@ public class CalendarFragment extends Fragment{
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 getFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new ToDoFragment(Calendar.DAY_OF_MONTH, Calendar.MONTH, Calendar.YEAR)).commit();
+                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
+                        replace(R.id.fragment_container, new ToDoFragment(date.getDay(), date.getMonth(), date.getYear())).
+                        addToBackStack(null).
+                        commit();
             }
         });
 
