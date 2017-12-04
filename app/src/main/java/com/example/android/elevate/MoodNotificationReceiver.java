@@ -23,11 +23,11 @@ public class MoodNotificationReceiver extends BroadcastReceiver{
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        int NOTIFICATION_ID = new Random().nextInt(50);
+        int NOTIFICATION_ID = intent.getIntExtra("id", 12);
         int importance = NotificationManager.IMPORTANCE_HIGH;
         String CHANNEL_ID = "mood_channel";
         CharSequence name = "mood channel";
-        String description = "mood prompt channel description";
+        String description = "mood prompt description";
 
         NotificationChannel mood_channel = new NotificationChannel(CHANNEL_ID, name, importance);
         mood_channel.setDescription(description);
@@ -42,7 +42,8 @@ public class MoodNotificationReceiver extends BroadcastReceiver{
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(android.R.drawable.ic_popup_reminder) /* required */
                         .setContentTitle("Elevate")
-                        .setContentText("Please log your mood");
+                        .setContentText("Please log your mood")
+                        .setAutoCancel(true);
 
         Intent resultIntent = new Intent(context, MoodInputUI.class);
 

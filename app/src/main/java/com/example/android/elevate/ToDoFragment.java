@@ -33,6 +33,12 @@ public class ToDoFragment extends Fragment {
         day_year =  cal.get(Calendar.DAY_OF_YEAR) + ":" +year;
     }
 
+    @SuppressLint("ValidFragment")
+    public ToDoFragment(Calendar cal){
+        day_year = cal.get(Calendar.DAY_OF_YEAR) +":" +
+                cal.get(Calendar.YEAR);
+    }
+
     public ToDoFragment(){
         cal = Calendar.getInstance();
         day_year = cal.get(Calendar.DAY_OF_YEAR) +":" +
@@ -53,12 +59,8 @@ public class ToDoFragment extends Fragment {
         Log.d(TAG, dataBase.todaysItemsList.toString());
         mAdapter = new ToDoAdapter(dataBase);
         mRecyclerView.setAdapter(mAdapter);
-        dataBase.refreshTodaysList(day_year, mAdapter);
-
         mAdapter.notifyDataSetChanged();
 
-        Log.d(TAG, dataBase.mapOfArraysToString(dataBase.donenessHistory) );
-        Log.d(TAG, dataBase.moodHistory.toString() );
         return rootView;
     }
 
@@ -66,6 +68,7 @@ public class ToDoFragment extends Fragment {
     public void onResume(){
         super.onResume();
         mAdapter.notifyDataSetChanged();
+        main.database.refreshTodaysList(day_year, mAdapter);
     }
 
 }

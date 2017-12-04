@@ -1,15 +1,21 @@
 package com.example.android.elevate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Joel on 11/16/2017.
  */
 
 public class DBHabitItem {
     public String name;
-    public boolean[] days;
+    List<Boolean> recurringDays;
 
-    public DBHabitItem(String name, boolean[] recurringDays) {
+    public DBHabitItem(String name, boolean[] days) {
         this.name = name;
-        days = recurringDays;
+        recurringDays = new ArrayList<>();
+        for (boolean b : days) {
+            recurringDays.add(b);
+        }
     }
 }
