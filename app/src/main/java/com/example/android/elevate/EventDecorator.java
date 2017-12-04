@@ -11,13 +11,18 @@ import java.util.Calendar;
 public class EventDecorator implements DayViewDecorator {
 
     private int day_of_year;
-    private Drawable dayColor;
+    private Drawable dayBG;
 
-    public EventDecorator(int day_of_year, Drawable dayColor) {
+    //each day has its own decorator since there are many combinations
+    //of mood and background color
+    public EventDecorator(int day_of_year, Drawable dayBG) {
         this.day_of_year = day_of_year;
-        this.dayColor = dayColor;
+        this.dayBG = dayBG;
     }
 
+    //retrieves the Calendar equivalent of the provided CalendarDay
+    //and checks to see if this matches the correct day_of_year
+    //this loops quite frequently and can unfortunately be slow
     @Override
     public boolean shouldDecorate(CalendarDay day) {
         Calendar cal = Calendar.getInstance();
@@ -31,8 +36,11 @@ public class EventDecorator implements DayViewDecorator {
         return false;
     }
 
+    //sets the background of the DayViewFacade that matches
+    //the day_of_year found in shouldDecorate()
     @Override
     public void decorate(DayViewFacade view) {
-        view.setBackgroundDrawable(this.dayColor);
+
+        view.setBackgroundDrawable(this.dayBG);
     }
 }

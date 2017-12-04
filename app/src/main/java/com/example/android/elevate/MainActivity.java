@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity
                 int notification_id = rand.nextInt(5000);
 
                 database.addNewItem(title, time1, time2, recurringDays, notification_id);
-				
+
                 createNotification(title, time1, notification_id);
                 String msg = title + notification_id+ " created from " + time1.getTime();
                 Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
