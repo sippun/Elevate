@@ -25,7 +25,6 @@ public class DataBase {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser user;
     private String userDataPath = "users/guest";
-    public HashMap<String,ArrayList<ToDoItem>> dayToItemsMap = new HashMap<>();
     public ArrayList<ToDoItem> todaysItemsList = new ArrayList<ToDoItem>();
     public HashMap<String, Integer[]> donenessHistory = new HashMap<>();
     public HashMap<String, Integer> moodHistory = new HashMap<>();
@@ -40,7 +39,6 @@ public class DataBase {
         if (user != null) {
             userDataPath = "users/" + user.getUid();
             setupHistory();
-            recordMood(5);
         }
     }
 
