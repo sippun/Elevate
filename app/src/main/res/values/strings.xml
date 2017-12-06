@@ -13,7 +13,8 @@
     <string name="greentored">GreenToRed</string>
     <string name="mood_prompt">How are you feeling right now?</string>
 
-    <string name="submitMood">Submit</string>
+    <string name="submitMood">Record</string>
     <string name="repeat_optional">Repeat (optional)</string>
     <string name="elevate_tagline"><![CDATA[Productivity & Mood Tracker]]></string>
+    <string name="task_title">Task Title</string>
 </resources>

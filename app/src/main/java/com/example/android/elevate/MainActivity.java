@@ -168,12 +168,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_mood) {
             Intent a = new Intent(MainActivity.this, MoodInputUI.class);
             startActivity(a);
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -190,18 +184,28 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 String title = data.getStringExtra("title");
-                Calendar time1 = (Calendar) data.getExtras().get("time1");
-                Calendar time2 = (Calendar) data.getExtras().get("time2");
-                boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
 
-                int notification_id = rand.nextInt(5000);
+                if (data.getStringExtra("type").equals("task")) {
+                    Calendar time1 = (Calendar) data.getExtras().get("time1");
+                    Calendar time2 = (Calendar) data.getExtras().get("time2");
+                    boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
+                    int notification_id = rand.nextInt(5000);
+                    database.addNewTask(title, time1, time2, recurringDays, notification_id);
 
-                database.addNewItem(title, time1, time2, recurringDays, notification_id);
+                    createNotification(title, time1, notification_id);
+                    String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
+                    Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
+                    toast.show();
+                } else if (data.getStringExtra("type").equals("habit")) {
+                    boolean[] recurringDays = (boolean[]) data.getExtras().get("recur");
+                    int notification_id = rand.nextInt(5000);
+                    database.addNewHabit(title, recurringDays, notification_id);
 
-                createNotification(title, time1, notification_id);
-                String msg = title + notification_id+ " created from " + time1.getTime();
-                Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
-                toast.show();
+//                    createNotification(title, time1);
+//                    String msg = title + " created from " + time1.getTime() +" to "+ time2.getTime();
+//                    Toast toast = Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_LONG);
+//                    toast.show();
+                }
 
                 //getSupportFragmentManager().beginTransaction().
                 //        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).

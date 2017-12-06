@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ToDoFragment extends Fragment {
@@ -59,12 +58,8 @@ public class ToDoFragment extends Fragment {
         Log.d(TAG, dataBase.todaysItemsList.toString());
         mAdapter = new ToDoAdapter(dataBase);
         mRecyclerView.setAdapter(mAdapter);
-        dataBase.refreshTodaysList(day_year, mAdapter);
-
         mAdapter.notifyDataSetChanged();
 
-        Log.d(TAG, dataBase.mapOfArraysToString(dataBase.donenessHistory) );
-        Log.d(TAG, dataBase.moodHistory.toString() );
         return rootView;
     }
 
@@ -72,6 +67,7 @@ public class ToDoFragment extends Fragment {
     public void onResume(){
         super.onResume();
         mAdapter.notifyDataSetChanged();
+        main.database.refreshTodaysList(day_year, mAdapter);
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.android.elevate;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -9,6 +10,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -23,7 +25,6 @@ public class DataBase {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser user;
     private String userDataPath = "users/guest";
-    public HashMap<String,ArrayList<ToDoItem>> dayToItemsMap = new HashMap<>();
     public ArrayList<ToDoItem> todaysItemsList = new ArrayList<ToDoItem>();
     public HashMap<String, Integer[]> donenessHistory = new HashMap<>();
     public HashMap<String, Integer> moodHistory = new HashMap<>();
@@ -38,7 +39,6 @@ public class DataBase {
         if (user != null) {
             userDataPath = "users/" + user.getUid();
             setupHistory();
-            recordMood(5);
         }
     }
 
@@ -49,9 +49,12 @@ public class DataBase {
     }
 
     //add to-do item to list of tasks on firebase
-    public void addNewItem(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays, int notifId){
-        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays, notifId);
+    public void addNewTask(String name, Calendar startTime, Calendar endTime,boolean[] recurringDays, int notifId){
+        if(startTime.get(Calendar.DATE) == endTime.get(Calendar.DATE)){
+            recurringDays[getDayOfWeek(startTime)] = true;
+        }
 
+        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays, notifId);
         if(user != null) {
             Log.d(TAG+"addTask", item.toString());
             DatabaseReference ref= database.getReference(userDataPath+"/tasks");
@@ -59,7 +62,28 @@ public class DataBase {
             item.setId(key);
             ref.child("/"+key).setValue( item.createDataBaseEntry() );
         }
+    }
 
+    public void addNewHabit(String name, boolean[] recurringDays, int notifId) {
+        Calendar startTime, endTime;
+        startTime = Calendar.getInstance();
+        endTime = Calendar.getInstance();
+        startTime.setTime(startTime.getTime());
+        endTime.setTime(endTime.getTime());
+
+        ToDoItem item = new ToDoItem(name, startTime, endTime, recurringDays, notifId);
+
+        if(user != null) {
+            DatabaseReference ref= database.getReference(userDataPath+"/tasks"); //lol
+            String key = ref.push().getKey();
+            item.setId(key);
+            ref.child("/"+key).setValue( item.createDataBaseEntry() );
+        }
+    }
+
+    private int getDayOfWeek(Calendar day){
+        //add 5 and mod 7 to handle monday being the first day of the week.
+        return (day.get(Calendar.DAY_OF_WEEK)+5) % 7;
     }
 
     //setup todaysItemsList for use
@@ -91,7 +115,7 @@ public class DataBase {
                 firebaseListToCalendar("/tasks", "/calendar/"+today, today, fireBaseList,mAdapter);
                 //including this seems to duplicate all tasks, despite there not being any habits yet.
                 // Probably because it is adding from the same list two separate times simultaneously?.
-                // firebaseListToCalendar("/habits", "/calendar/"+today, today, fireBaseList, mAdapter);
+                //firebaseListToCalendar("/habits", "/calendar/"+today, today, fireBaseList, mAdapter);
             }
 
             @Override
@@ -133,8 +157,6 @@ public class DataBase {
     }
     private void updateLocal(final String today, final RecyclerView.Adapter mAdapter){
         final DatabaseReference tasks = database.getReference(userDataPath+"/calendar/"+today);
-        Log.d(TAG, today);
-
 
         tasks.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -147,7 +169,6 @@ public class DataBase {
                     }
                 }
                 mAdapter.notifyDataSetChanged();
-                Log.d(TAG+"Refresh", todaysItemsList.toString());
             }
 
             @Override
@@ -161,7 +182,8 @@ public class DataBase {
         //update Firebase:
         String path = userDataPath+"/calendar/"+ openDay+"/"+itemID+"/done";
         database.getReference(path).setValue(done);
-        //update Local: (not strictly necessary, but there is a noticeable lag in display of recently changed values otherwise)
+        //update Local: (not strictly necessary, but there
+        // is a noticeable lag in display of recently changed values otherwise)
         for (ToDoItem item: todaysItemsList) {
             if(item.id.equals(itemID)) {
                 item.done = done;
@@ -186,7 +208,6 @@ public class DataBase {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.hasChildren()){
                             donenessHistory.put(key, getNumTasks(dataSnapshot));
-                            Log.d("productivityHistory", key+ mapOfArraysToString(donenessHistory));
                         }
                     }
 
@@ -269,24 +290,6 @@ public class DataBase {
         }else{
             return -1;
         }
-    }
-
-    public void deleteTaskFuture( ToDoItem item ){
-
-    }
-
-    public void deleteTaskComplete( String itemId){
-
-    }
-
-    //changes the end date of a task
-    private void deleteTaskStartingFrom( String itemId, String start ){
-
-    }
-
-    //removes tasks from task list if the date is after the end date
-    private void clearExpiredTasks( ){
-
     }
 
     private int getYear(String today){

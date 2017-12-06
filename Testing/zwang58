@@ -1,0 +1,13 @@
+Module: AddActivity/MainActivity
+Functions: Adding new Items into database (later firebase only)
+Inputs: TaskName, startTime, startdate, endTime, endDate, recurringDays[]
+Results: new ToDoItem(TaskName, startTime, startdate, endTime, endDate, recurringDays[])
+         inserted into hash values of all keys matching recurringDays[]
+
+
+Module: NotificationReceiver/MoodNotificationReceiver
+Functions: Registering notification channel, building new notifications
+Inputs: Title, time
+Results: Everyday at the given time AlarmManager triggers intent that carries metadata that the receiver
+         needs to build a habit/mood notification.
+        

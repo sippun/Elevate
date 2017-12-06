@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="16dp"
     tools:context="com.example.android.elevate.AddActivity">
 
     <EditText
@@ -14,7 +15,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="42dp"
         android:ems="10"
-        android:hint="Task Title"
+        android:hint="@string/task_title"
         android:inputType="text"
         android:textSize="24sp" />
 

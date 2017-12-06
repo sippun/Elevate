@@ -3,71 +3,63 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/text_StartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:padding="5sp"
+        android:text="Date"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
     <LinearLayout
         android:id="@+id/row_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/text_StartDate"
+        android:paddingBottom="24dp"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true">
 
         <TextView
-            android:id="@+id/text_StartDate"
+            android:id="@+id/text_StartTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5sp"
-            android:text="Date"
+            android:text="Start Time"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="24sp"/>
 
         <View
             android:layout_width="10dp"
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/text_StartTime"
+            android:id="@+id/text_EndTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/row_start"
+            android:layout_alignEnd="@id/row_start"
             android:padding="5sp"
-            android:text="Start Time"
+            android:text="End Time"
             android:textColor="@color/black"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/text_EndDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_start"
-        android:layout_alignLeft="@id/row_start"
-        android:padding="5sp"
-        android:text="Date"
-        android:textColor="@color/black"
-        android:textSize="24sp"/>
-
-    <TextView
-        android:id="@+id/text_EndTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_start"
-        android:layout_alignEnd="@id/row_start"
-        android:padding="5sp"
-        android:text="End Time"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/textView_repeat_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_EndDate"
-        android:layout_alignStart="@id/text_EndDate"
+        android:layout_below="@id/row_start"
+        android:layout_centerHorizontal="true"
         android:text="@string/repeat_optional"
         android:textSize="18sp" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_EndDate"
+        android:layout_below="@id/row_start"
         android:layout_centerHorizontal="true">
         <include
             layout="@layout/input_add_recurring_days"
