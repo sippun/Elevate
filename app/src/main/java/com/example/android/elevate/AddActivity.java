@@ -109,17 +109,6 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 boolean[] recurringDays = getRecurringDays(checkDays);
-//                DBHabitItem newHabit = new DBHabitItem(taskTitle.getText().toString(),
-//                        recurringDays);
-//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                if(user != null && newHabit != null) {
-//                    FirebaseDatabase.getInstance().getReference()
-//                            .child("users")
-//                            .child(user.getUid())
-//                            .child("habits")
-//                            .push()
-//                            .setValue(newHabit);
-//                }
 
                 if(taskTitle.getText().length()> 0) {
                     Intent intent = new Intent(AddActivity.this, MainActivity.class);

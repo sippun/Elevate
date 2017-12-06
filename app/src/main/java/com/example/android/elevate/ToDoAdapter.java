@@ -1,5 +1,8 @@
 package com.example.android.elevate;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ import java.util.List;
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     private DataBase dataBase;
     private List<ToDoItem> items;
+    public static CardView card;
     //private static final DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     // Provide a reference to the views for each data item
@@ -40,6 +44,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.todo_name);
             nameToggleButton = itemView.findViewById(R.id.todo_toggle);
+            card = itemView.findViewById(R.id.card);
         }
     }
 
@@ -61,6 +66,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d("addTask", "onBind runs");
@@ -76,14 +82,19 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         Log.d("addTask", itemID);
 
         final ToggleButton toggleButton = holder.nameToggleButton;
-
-        //dataBase.updateDoneness(toggleButton, day, itemID);
-
         toggleButton.setChecked(item.done);
+
+        //if(item.done) card.setCardBackgroundColor(R.color.cardview_light_background);
 
          //Set up toggle to alter the database:
          toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
              public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                 //if (isChecked) {
+                 //    card.setCardBackgroundColor(R.color.cardview_light_background);
+                 //}else {
+                 //    card.setCardBackgroundColor(R.color.lightGray);
+                 //}
+
                  dataBase.updateDoneness(itemID, isChecked);
                  Log.d("Toggle", itemID);
              }

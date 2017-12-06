@@ -5,12 +5,12 @@
         android:interpolator="@android:anim/linear_interpolator"
         android:fromXDelta="0%p"
         android:toXDelta="-100%p"
-        android:duration="400" />
+        android:duration="280" />
 
     <alpha
         android:fromAlpha="1.0"
         android:toAlpha="0.0"
         android:interpolator="@android:anim/accelerate_interpolator"
-        android:duration="380" />
+        android:duration="280" />
 
 </set>

@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_calendar && currentPage != R.id.nav_calendar) {
+        if (id == R.id.nav_calendar) {
             getSupportFragmentManager().beginTransaction().
                     setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).
                     replace(R.id.fragment_container, new CalendarFragment()).

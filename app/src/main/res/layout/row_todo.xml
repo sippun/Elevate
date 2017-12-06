@@ -1,28 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="70dp">
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/todo_name"
-        android:layout_width="299dp"
+    <android.support.v7.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/colorPrimary"
-        android:textSize="24sp" />
+        app:cardBackgroundColor="@color/lightGray"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="false">
 
-    <ToggleButton
-        android:id="@+id/todo_toggle"
-        android:layout_width="74dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:checked="false"
-        android:textOff=" "
-        android:textOn="Done" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/todo_name"
+                android:layout_width="299dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:text="haha"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="@color/colorPrimary"
+                android:textSize="26sp" />
+
+            <ToggleButton
+                android:id="@+id/todo_toggle"
+                android:layout_width="74dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:checked="false"
+                android:textOff="Clear"
+                android:textOn="Done" />
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
 
 </LinearLayout>
