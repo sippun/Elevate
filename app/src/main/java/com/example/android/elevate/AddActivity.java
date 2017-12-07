@@ -211,6 +211,17 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+        endDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dialog = new DatePickerDialog(AddActivity.this,
+                        R.style.Theme_AppCompat_Light_Dialog,
+                        dListener2,
+                        currentYear, currentMonth-1, currentDay);
+                dialog.show();
+            }
+        });
+
         //set each time picker listener's behavior on setting a time
         //endTime syncs with startTime initially but adds one hour (assume 1-hour task duration)
         tListener1 = new TimePickerDialog.OnTimeSetListener() {
@@ -238,6 +249,7 @@ public class AddActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 date1 = date2 = (month+1) +"/"+dayOfMonth+"/"+year;
                 startDate.setText(date1);
+                endDate.setText(date2);
                 setDate(time1, year, month, dayOfMonth);
                 setDate(time2, year, month, dayOfMonth);
             }
