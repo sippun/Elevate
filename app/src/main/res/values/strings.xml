@@ -17,4 +17,7 @@
     <string name="repeat_optional">Repeat (optional)</string>
     <string name="elevate_tagline"><![CDATA[Productivity & Mood Tracker]]></string>
     <string name="task_title">Task Title</string>
+    <string name="to_do_list">To-Do List</string>
+    <string name="notDoneStatus">to-do</string>
+    <string name="doneStatus">Done</string>
 </resources>
