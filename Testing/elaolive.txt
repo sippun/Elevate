@@ -1,0 +1,47 @@
+Module: DataBase/MainActivity
+
+Function: logIntoFirebase()
+Inputs: Open app for the first time on a new device.
+Results: The user should be prompted to log in (if no google account is registered on device).
+		 The user should be prompted to select the account they want to connect the app to (if multiple google accounts are registered on the device).
+		 The user's google account should be tied to the app if there is one account on the device.
+
+Function: addNewTask(taskName, startDate, endDate, recurringDays, notifId)
+Method: Use the UI to add tasks to the database. Check Firebase to see if tasks were added to firebase appropriately.
+	Inputs:																Outputs:
+	taskName:		startDate: 	endDate:			recurringDays:		
+	"test"			tomorrow	end of the month	recur everyday		Check that data was logged in Firebase that appears to match input.
+	""				today		end of the month	recur everyday		Check that the task is not added to Firebase.
+	"recurring"		today		end of the month	recur M, W, F 		Check that the recurring days list is marked true for 0 (Monday), 2 (Wednesday), and 4 (Friday).
+	"Sunday's"		next Sunday	following Sunday	recur Sunday		Check that the recurring days list is marked true for only 6 (Sunday). 
+	"Nonrecurring"	today		today				empty list			Check that the task is recorded as recording on the day of the week it occurs once.
+
+Function: getDayOfWeek( day )
+	Input:		Output:
+	a Monday	0
+	a Tuesday	1
+	a Saturday	5
+	a Sunday	6
+
+Function: refreshTodaysList( day, adapter)
+Input: A day and the todo adapter.
+Output: tasks from the Firebase are displayed in the day's todo list
+
+Function: updateDoneness( taskId, done )
+Input:			Output:
+done = true		The task is marked as done in the FireBase.
+done = false	The task is marked as not done in Firebase.
+
+Function: recordMood( rating )
+Input: A number 1 through 5.
+Output: Check that the inputed rating is logged with the right day on Firebase.
+
+Function: setupProductivityHistory()
+Input: A user logged in who has completed some of their tasks in the past.
+Output: After clicking on a day in the calender, from then on the color of that day is 
+		determined by the number of tasks you have completed on it out of number of tasks you 
+		had to complete.
+
+Function: setupMoodHistory()
+Input: A user logged in who has logged their mood in the past.
+Output: The average rating for the user's mood for a given day is displayed graphically on the calendar.
