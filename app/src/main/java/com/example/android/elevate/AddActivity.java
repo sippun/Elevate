@@ -24,7 +24,7 @@ import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
     private static final String TAG = "AddActTag";
-    DatePickerDialog.OnDateSetListener dListener1;
+    DatePickerDialog.OnDateSetListener dListener1, dListener2;
     TimePickerDialog.OnTimeSetListener tListener1, tListener2;
     int currentDay, currentMonth, currentYear; //temp values to hold input
     String date1, date2;
@@ -148,10 +148,11 @@ public class AddActivity extends AppCompatActivity {
         final Calendar cal = Calendar.getInstance();
 
         //set up layout components of addTask page
-        final TextView startDate = (TextView) findViewById(R.id.text_StartDate);
+        final TextView startDate = (TextView) findViewById(R.id.text_startDate);
+        final TextView endDate = (TextView) findViewById(R.id.text_endDate);
 
-        final TextView startTime = (TextView) findViewById(R.id.text_StartTime);
-        final TextView endTime = (TextView) findViewById(R.id.text_EndTime);
+        final TextView startTime = (TextView) findViewById(R.id.text_startTime);
+        final TextView endTime = (TextView) findViewById(R.id.text_endTime);
 
         Button button_AddTask = (Button) findViewById(R.id.button_CreateTask);
 
@@ -165,8 +166,9 @@ public class AddActivity extends AppCompatActivity {
         currentYear = getIntent().getIntExtra("year",cal.get(Calendar.YEAR));
 
         //set startdate and enddate to default current date. Simplifies user input
-        date1 = currentMonth+"/"+currentDay+"/"+currentYear;
+        date1 = date2 = currentMonth+"/"+currentDay+"/"+currentYear;
         startDate.setText(date1);
+        endDate.setText(date2);
 
         //click on startTime/endTime boxes to open up time pickers. Assign correct listeners.
         startTime.setOnClickListener(new View.OnClickListener() {
@@ -237,6 +239,15 @@ public class AddActivity extends AppCompatActivity {
                 date1 = date2 = (month+1) +"/"+dayOfMonth+"/"+year;
                 startDate.setText(date1);
                 setDate(time1, year, month, dayOfMonth);
+                setDate(time2, year, month, dayOfMonth);
+            }
+        };
+
+        dListener2 = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                date2 = (month+1) +"/"+dayOfMonth+"/"+year;
+                endDate.setText(date2);
                 setDate(time2, year, month, dayOfMonth);
             }
         };
