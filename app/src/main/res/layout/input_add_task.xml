@@ -4,18 +4,21 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:background="@drawable/text_style"
         android:id="@+id/text_StartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:padding="5sp"
+        android:layout_marginTop="10dp"
+        android:padding="7sp"
         android:text="Date"
         android:textColor="@color/black"
         android:textSize="24sp" />
 
     <LinearLayout
         android:id="@+id/row_start"
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_StartDate"
@@ -24,18 +27,21 @@
         android:layout_centerHorizontal="true">
 
         <TextView
+            android:background="@drawable/text_style"
             android:id="@+id/text_StartTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start Time"
+            android:padding="5sp"
             android:textColor="@color/black"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
 
         <View
             android:layout_width="10dp"
             android:layout_height="match_parent" />
 
         <TextView
+            android:background="@drawable/text_style"
             android:id="@+id/text_EndTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
