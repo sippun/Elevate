@@ -1,0 +1,15 @@
+ToDoAdapter.java
+
+Functional testing involved seeing if a list was viewable and interactable with both dummy data and data from Firebase.
+
+Equivalence test cases with list of items:
+  - ToDoItems with expected data
+  - ToDoItems with invalid data
+  - empty
+
+Mainly the String name of ToDoItem is used, so test with ToDoItems with Strings containing strange characters or really long strings.
+
+
+AddActivity.java
+
+Functional testing involved checking Firebase console for data after setting up user input options.
