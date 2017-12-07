@@ -3,37 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:background="@drawable/text_style"
-        android:id="@+id/text_StartDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:padding="7sp"
-        android:text="Date"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
-
     <LinearLayout
         android:id="@+id/row_start"
         android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_StartDate"
         android:paddingBottom="24dp"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true">
 
         <TextView
             android:background="@drawable/text_style"
-            android:id="@+id/text_StartTime"
+            android:id="@+id/text_startTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start Time"
             android:padding="5sp"
-            android:textColor="@color/black"
+            android:textColor="@color/common_google_signin_btn_text_light"
             android:textSize="24sp" />
 
         <View
@@ -42,14 +28,47 @@
 
         <TextView
             android:background="@drawable/text_style"
-            android:id="@+id/text_EndTime"
+            android:id="@+id/text_startDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/row_start"
-            android:layout_alignEnd="@id/row_start"
             android:padding="5sp"
+            android:text="Start Date"
+            android:textColor="@color/common_google_signin_btn_text_light"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/row_start2"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/row_start"
+        android:paddingBottom="24dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:background="@drawable/text_style"
+            android:id="@+id/text_endTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="End Time"
-            android:textColor="@color/black"
+            android:padding="5sp"
+            android:textColor="@color/common_google_signin_btn_text_light"
+            android:textSize="24sp" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:background="@drawable/text_style"
+            android:id="@+id/text_endDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5sp"
+            android:text="End Date"
+            android:textColor="@color/common_google_signin_btn_text_light"
             android:textSize="24sp" />
     </LinearLayout>
 
@@ -57,7 +76,7 @@
         android:id="@+id/textView_repeat_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/row_start"
+        android:layout_below="@id/row_start2"
         android:layout_centerHorizontal="true"
         android:text="@string/repeat_optional"
         android:textSize="18sp" />
@@ -65,7 +84,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/row_start"
+        android:layout_below="@id/row_start2"
         android:layout_centerHorizontal="true">
         <include
             layout="@layout/input_add_recurring_days"

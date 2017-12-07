@@ -84,16 +84,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         final ToggleButton toggleButton = holder.nameToggleButton;
         toggleButton.setChecked(item.done);
 
-        //if(item.done) card.setCardBackgroundColor(R.color.cardview_light_background);
-
          //Set up toggle to alter the database:
          toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
              public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                 //if (isChecked) {
-                 //    card.setCardBackgroundColor(R.color.cardview_light_background);
-                 //}else {
-                 //    card.setCardBackgroundColor(R.color.lightGray);
-                 //}
 
                  dataBase.updateDoneness(itemID, isChecked);
                  Log.d("Toggle", itemID);
