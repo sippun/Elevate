@@ -68,6 +68,7 @@ public class DataBase {
         Calendar startTime, endTime;
         startTime = Calendar.getInstance();
         endTime = Calendar.getInstance();
+        endTime.add(Calendar.DATE, 30);
         startTime.setTime(startTime.getTime());
         endTime.setTime(endTime.getTime());
 
